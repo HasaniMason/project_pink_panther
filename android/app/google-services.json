@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "992918306136",
+    "project_id": "top-tier-9814f",
+    "storage_bucket": "top-tier-9814f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:992918306136:android:f112912707434d58b0792d",
+        "android_client_info": {
+          "package_name": "com.CITex.TopTier.project_pink_panther"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6cgBKuug0QKxt_R-noYZWdNz_IxqgB0M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
