@@ -6,6 +6,7 @@ import 'package:top_tier/Custom%20Data/Enums/SignInStatus.dart';
 import 'package:top_tier/Firebase/ClientFirebase/ClientFirebase.dart';
 import 'package:top_tier/Screens/Retail%20Screens/Shop%20Screens/OpeningRetailScreen.dart';
 import 'package:top_tier/Screens/Retail%20Screens/Shop%20Screens/RetailSelectionScreen.dart';
+import 'package:top_tier/Screens/mainScreen.dart';
 
 import '../../Widgets/TextFieldWidgets.dart';
 import 'SignUpScreen.dart';
@@ -66,7 +67,7 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
             children: [
 
               Padding(
-                padding: const EdgeInsets.only(top:120.0),
+                padding: const EdgeInsets.only(top:20.0),
                 child: topGraphic(),
               ),
 
@@ -86,25 +87,9 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
   Widget topGraphic() {
     return Column(
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0, right: 8.0),
-          child: Column(
-            children: [
-              Text(
-                'Top Tier',
-                style: Theme.of(context)
-                    .textTheme
-                    .displayLarge!
-                    .copyWith(color: Theme.of(context).colorScheme.primary),
-              ),
-              Text(
-                'd minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat',
-                style: TextStyle(color: Theme.of(context).primaryColor),
-                textAlign: TextAlign.center,
-              )
-            ],
-          ),
-        ),
+        Container(
+           // height: 250,
+            child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png',fit: BoxFit.fitHeight,)),
 
         //Image Carousel
         FanCarouselImageSlider(
@@ -175,7 +160,7 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
                  Client client = await widget.clientFirebase.getClient();
 
                  if(client.firstName != 'Not Signed In')
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>RetailSelectionScreen(client: client)));
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)));
 
               },
               child: const Text(

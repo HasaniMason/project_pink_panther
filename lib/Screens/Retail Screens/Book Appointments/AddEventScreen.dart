@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:calendar_view/calendar_view.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:top_tier/Custom%20Data/BookingEvents.dart';
+import 'package:top_tier/Firebase/ClientFirebase/BookedEventsFirebase.dart';
 
+import '../../../Custom Data/Clients.dart';
 import '../../../Widgets/InputTextFieldWidgets.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
 
 class AddEventScreen extends StatefulWidget {
   DateTime selectedDate;
-  List<CalendarEventData>? eventData;
-  EventController eventController;
+  CalendarController calendarController;
+  Client client;
+  CalendarTapDetails details;
+
 
   AddEventScreen(
       {super.key,
       required this.selectedDate,
-        required this.eventController,
-      this.eventData});
+      required this.calendarController,
+      required this.client,
+      required this.details});
 
   @override
   State<AddEventScreen> createState() => _AddEventScreenState();
@@ -29,6 +36,8 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   TimeOfDay? selectedTime;
 
+  BookedEventsFirebase bookedEventsFirebase = BookedEventsFirebase();
+
   final List<String> items = [
     'A_Item1',
     'A_Item2',
@@ -40,22 +49,45 @@ class _AddEventScreenState extends State<AddEventScreen> {
     'B_Item4',
   ];
 
+  BookingEvent event = BookingEvent(
+      startTime: DateTime.now(),
+      day: DateTime.now(),
+      firstName: '',
+      lastName: '',
+      id: '',
+      complete: false,
+      approved: false,
+      lashType: '',
+      phoneNumber: '',
+  clientEmail: '',
+  clientId: '');
+
+  @override
+  void initState() {
+    super.initState();
+
+    //assign client info into booking event
+    event.firstName = widget.client.firstName;
+    event.lastName = widget.client.lastName;
+    event.phoneNumber = widget.client.phoneNumber;
+    event.clientId = widget.client.id;
+    event.clientEmail = widget.client.email;
+
+  }
+
   String? selectedValue;
 
   @override
   Widget build(BuildContext context) {
-    return CalendarControllerProvider(
-      controller: EventController(),
-      child: Scaffold(
-        appBar: AppBar(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Header(context),
-              Inputs(context),
-              BottomInfo(context),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Header(context),
+            Inputs(context),
+            BottomInfo(context),
+          ],
         ),
       ),
     );
@@ -113,24 +145,24 @@ class _AddEventScreenState extends State<AddEventScreen> {
                     backgroundColor: Theme.of(context).primaryColor),
                 onPressed: () {
                   ///create a method to check if info is input correctly
-
                   //create event based off info input
-                  final event = CalendarEventData(
-                      title: 'Lash Appointment',
-                      date: widget.selectedDate,
-                      color: Colors.blue,
-                      startTime: DateTime(
-                          widget.selectedDate.year,
-                          widget.selectedDate.month,
-                          widget.selectedDate.day,
-                          selectedTime?.hour ?? 7,
-                          //selected time. If not input, chose 7 by default
-                          selectedTime?.minute ?? 00),
-                      description:
-                          'Appointment w/ ${nameController.text}. Phone Number: ${phoneController.text}.  Email: ${emailController.text}. Date: ${widget.selectedDate} @ ${selectedTime ?? 'NO SPECIFIED TIME'}');
-                  widget.eventController.add(event);
 
-                  print(event.description);
+                  selectedTime ??= const TimeOfDay(
+                      hour: 8,
+                      minute: 00); //if no time selected, created default time
+
+                  //add time to datetime(selected date)
+                  DateTime temp = widget.calendarController.selectedDate!.add(
+                      Duration(
+                          hours: selectedTime!.hour,
+                          minutes: selectedTime!.minute));
+                  event.startTime = temp; //store
+                  event.day = temp;
+
+                  print(event.startTime);
+                  // print(event.description);
+
+                  bookedEventsFirebase.bookEvent(widget.client, event);
                   Navigator.pop(context);
                 },
                 child: const Row(
@@ -298,7 +330,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
                 .bodySmall!
                 .copyWith(color: Colors.black),
           ),
-
           Text(
             "Selected Date: ${widget.selectedDate.month}-${widget.selectedDate.day}-${widget.selectedDate.year}",
             textAlign: TextAlign.center,
@@ -319,7 +350,6 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
     if (picked != null) {
       setState(() {
-
         selectedTime = picked;
 
         picked = picked?.replacing(

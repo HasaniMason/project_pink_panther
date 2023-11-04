@@ -119,12 +119,10 @@ class _OpeningRetailScreenState extends State<OpeningRetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+
           title: Hero(
             tag: 'Hero',
-            child: Text(
-              "Logo Here",
-              style: TextStyle(color: Theme.of(context).primaryColor),
-            ),
+            child: SizedBox(height:100,child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')),
           ),
           centerTitle: true,
           //to center title/logo

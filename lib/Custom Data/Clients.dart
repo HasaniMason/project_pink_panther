@@ -15,6 +15,8 @@ class Client {
 
   bool notificationsOn;
 
+  String? nextBooking;
+
 
   //specify if these variable are required or not. If not must declare variable using '?' to the right of variable type
   Client({required this.firstName,
@@ -26,7 +28,8 @@ class Client {
     required this.activeAccount,
     required this.admin,
   required this.phoneNumber,
-  required this.notificationsOn});
+  required this.notificationsOn,
+  this.nextBooking});
 
 
   factory Client.fromFireStore(DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -42,7 +45,8 @@ class Client {
         activeAccount: data?['activeAccount'],
         admin: data?['admin'],
     phoneNumber: data?['phoneNumber'],
-    notificationsOn: data?['notifications']);
+    notificationsOn: data?['notifications'],
+    nextBooking: data?['nextBooking']);
   }
 
   Map<String, dynamic> toFireStore(){
@@ -56,7 +60,8 @@ class Client {
       'activeAccount': activeAccount,
       'admin': admin,
       'phoneNumber': phoneNumber,
-      'notificationsOn': notificationsOn
+      'notificationsOn': notificationsOn,
+      'nextBooking':nextBooking
     };
   }
 

@@ -6,7 +6,9 @@ class SocialPost {
   String description;
   String postID;
 
-  Client client;
+ String firstName;
+ String lastName;
+ String clientId;
   String? pic;
 
   DateTime time;
@@ -19,7 +21,9 @@ class SocialPost {
   SocialPost(
       {required this.description,
       required this.postID,
-      required this.client,
+     required this.firstName,
+        required this.lastName,
+        required this.clientId,
        this.pic,
       required this.time,
       required this.likes,
@@ -34,7 +38,9 @@ class SocialPost {
     return SocialPost(
         description: data?['description'],
         postID: data?['postID'],
-        client: data?['client'],
+        firstName: data?['firstName'],
+        lastName: data?['lastName'],
+        clientId: data?['clientId'],
         pic: data?['pic'],
         time: data?['time'],
         likes: data?['likes'],
@@ -47,12 +53,14 @@ class SocialPost {
     return {
       'description': description,
       'postID': postID,
-      'client': client,
+      "firstName":firstName,
+      "lastName": lastName,
+      'clientId': clientId,
       'pic': pic,
       'time': time,
       'likes': likes,
-      'mainColor': mainColor ?? Colors.white,
-      'altColor': altColor ?? Colors.white,
+      'mainColor': mainColor,
+      'altColor': altColor,
       'image': image,
     };
   }

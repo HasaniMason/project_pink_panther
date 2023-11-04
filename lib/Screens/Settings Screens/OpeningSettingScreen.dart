@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:top_tier/Screens/Settings%20Screens/Account%20Details%20Screen/Main%20Account%20Screen.dart';
 import '/Custom%20Data/Clients.dart';
 
 class OpeningSettingScreen extends StatefulWidget {
@@ -16,18 +17,23 @@ class _OpeningSettingScreenState extends State<OpeningSettingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
-       crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 24.0, bottom: 16),
             child: Text('Settings',
-                style: Theme.of(context)
+                style: Theme
+                    .of(context)
                     .textTheme
                     .displayMedium!
-                    .copyWith(color: Theme.of(context).primaryColor)),
+                    .copyWith(color: Theme
+                    .of(context)
+                    .primaryColor)),
           ),
 
           //list of settings item
@@ -45,86 +51,121 @@ class _OpeningSettingScreenState extends State<OpeningSettingScreen> {
 
   SafeArea CITexQoute(BuildContext context) {
     return SafeArea(child: Column(
+      children: [
+        Center(child: Container(height:200,child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png'))),
+
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Center(child: Text('Logo Here',style: Theme.of(context).textTheme.displayMedium,)),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-
-                Text('Powered by',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),),
-                SizedBox(
-                    height: 100,
-                    width: 100,
-                    child: Image.asset('lib/Images/CITex_noBack copy.png')
-                ),
-              ],
-            )
+            Text('Powered by', style: Theme
+                .of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: Theme
+                .of(context)
+                .primaryColor),),
+            SizedBox(
+                height: 100,
+                width: 100,
+                child: Image.asset('lib/Images/CITex_noBack copy.png')
+            ),
           ],
-        ));
+        )
+      ],
+    ));
   }
 
   Padding settingsItems(BuildContext context) {
     return Padding(
-          padding: const EdgeInsets.only(left: 8, right: 42),
-          child: Column(
+      padding: const EdgeInsets.only(left: 8, right: 42),
+      child: Column(
+        children: [
+
+          //Notification toggle
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
             children: [
-
-              //Notification toggle
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                children: [
-                  Text(
-                    "Notifications",
-                    style: TextStyle(color: Theme.of(context).colorScheme.primary),
-                  ),
-                  Switch(
-                    activeColor: Theme.of(context).colorScheme.primary,
-                      value: notifications,
-                      onChanged: (value){
-                      setState(() {
-                        notifications = !notifications;
-                      });
-                      })
-                ],
+              Text(
+                "Notifications",
+                style: TextStyle(color: Theme
+                    .of(context)
+                    .colorScheme
+                    .primary),
               ),
-
-              //Account Details button
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                children: [
-                  Text('Account Details',style: TextStyle(color: Theme.of(context).colorScheme.primary),),
-
-                  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).colorScheme.primary,))
-                ],
-              ),
-
-              //Payment info
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                children: [
-                  Text('Payment Method',style: TextStyle(color: Theme.of(context).colorScheme.primary),),
-
-                  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).colorScheme.primary,))
-                ],
-              ),
-
-
-              //Private Policy
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
-                children: [
-                  Text('Privacy Policy',style: TextStyle(color: Theme.of(context).colorScheme.primary),),
-
-                  IconButton(onPressed: (){}, icon: Icon(Icons.arrow_forward_ios_outlined,color: Theme.of(context).colorScheme.primary,))
-                ],
-              )
+              Switch(
+                  activeColor: Theme
+                      .of(context)
+                      .colorScheme
+                      .primary,
+                  value: widget.client.notificationsOn,
+                  onChanged: (value) {
+                    setState(() {
+                      notifications = !notifications;
+                    });
+                  })
             ],
           ),
-        );
+
+          //Account Details button
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            children: [
+              Text('Account Details', style: TextStyle(color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary),),
+
+              IconButton(onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>
+                    MainAccountScreen(client: widget.client,)));
+              }, icon: Icon(Icons.arrow_forward_ios_outlined, color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary,))
+            ],
+          ),
+
+          //Payment info
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            children: [
+              Text('Payment Method', style: TextStyle(color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary),),
+
+              IconButton(onPressed: () {},
+                  icon: Icon(Icons.arrow_forward_ios_outlined, color: Theme
+                      .of(context)
+                      .colorScheme
+                      .primary,))
+            ],
+          ),
+
+
+          //Private Policy
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
+            children: [
+              Text('Privacy Policy', style: TextStyle(color: Theme
+                  .of(context)
+                  .colorScheme
+                  .primary),),
+
+              IconButton(onPressed: () {},
+                  icon: Icon(Icons.arrow_forward_ios_outlined, color: Theme
+                      .of(context)
+                      .colorScheme
+                      .primary,))
+            ],
+          )
+        ],
+      ),
+    );
   }
 }

@@ -1,26 +1,96 @@
+import 'dart:typed_data';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:top_tier/Firebase/ClientFirebase/SocialFirebase.dart';
 
 import '../Custom Data/Clients.dart';
 import '../Custom Data/SocialPost.dart';
 import 'UserCircleWithInitials.dart';
+import 'package:firebase_cached_image/firebase_cached_image.dart';
 
 class SocialFeedWidget extends StatefulWidget {
   SocialPost socialPost;
-  Client client;
+  Client? client;
+  String? firstName;
+  String? lastName;
 
-  SocialFeedWidget({super.key, required this.socialPost, required this.client});
+  SocialFeedWidget(
+      {super.key,
+      required this.socialPost,
+      this.client,
+      this.firstName,
+      this.lastName});
 
   @override
   State<SocialFeedWidget> createState() => _SocialFeedWidgetState();
 }
 
-class _SocialFeedWidgetState extends State<SocialFeedWidget> {
+class _SocialFeedWidgetState extends State<SocialFeedWidget> with AutomaticKeepAliveClientMixin {
+  // final storage =
+  //     FirebaseStorage.instance.refFromURL('gs://top-tier-9814f.appspot.com');
+
   TimeOfDay? formatTime;
   String amOrPm = 'AM';
+
+  String? url;
+
+  SocialFirebase socialFirebase = SocialFirebase();
+   Uint8List? imageBytes;
+  String? errorMsg;
+
+
+  setUp() async{
+    if(widget.socialPost.pic != null || widget.socialPost.pic != 'null' ) {
+      var ref = FirebaseStorage.instance.ref().child(widget.socialPost.pic!);
+
+      try{
+        await ref.getDownloadURL().then((value) =>
+            setState(() {
+              url = value;
+
+              //url = 'https://${url!}';
+            }));
+      } on FirebaseStorage catch (e){
+        print('Did not get URL');
+      }
+    }
+
+  }
 
   @override
   void initState() {
     super.initState();
+
+
+    print("Debug: ${widget.socialPost.pic!}");
+    //
+    // if(widget.socialPost.pic != null || widget.socialPost.pic != 'null' ) {
+    //   var ref = FirebaseStorage.instance.ref().child(widget.socialPost.pic!);
+    //
+    //   try{
+    //      ref.getDownloadURL().then((value) =>
+    //         setState(() {
+    //           url = value;
+    //
+    //           //url = 'https://${url!}';
+    //         }));
+    //   } on FirebaseStorage catch (e){
+    //     print('Did not get URL');
+    //   }
+    // }
+
+    //create reference to document and check for updates
+    // DocumentReference reference = FirebaseFirestore.instance
+    //     .collection('socialPost')
+    //     .doc(widget.socialPost.clientId);
+    //
+    // reference.snapshots().listen((querySnapshot){
+    //   setState(() {
+    //     widget.socialPost.pic = querySnapshot.get('pic');
+    //   });
+    // });
 
     //place time of post in new variable
     formatTime = TimeOfDay(
@@ -34,79 +104,90 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> {
 
     //convert hour to 12 hour format
     formatTime = formatTime?.replacing(hour: formatTime?.hourOfPeriod);
+
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Material(
-        elevation: 3,
-        shadowColor: Theme.of(context).colorScheme.primary,
-        surfaceTintColor: Theme.of(context).colorScheme.primary,
-        color: Colors.grey,
-        borderRadius: BorderRadius.circular(20),
-        child: Container(
-          //height: 300,
-          width: MediaQuery.of(context).size.width,
 
-          child: Column(
-            children: [
-              TopRowButtons(),
+    return FutureBuilder(
+      future: setUp(),
+      builder: (BuildContext context, AsyncSnapshot text){
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Material(
+          elevation: 3,
+          shadowColor: Theme.of(context).colorScheme.primary,
+          surfaceTintColor: Theme.of(context).colorScheme.primary,
+          color: Colors.grey,
+          borderRadius: BorderRadius.circular(20),
+          child: Container(
+            //height: 300,
+            width: MediaQuery.of(context).size.width,
 
-
-              Body(context),
-
-            ],
+            child: Column(
+              children: [
+                TopRowButtons(),
+                Body(context)
+              ],
+            ),
           ),
         ),
-      ),
+      );
+  }
     );
   }
 
   Widget Body(BuildContext context) {
     return Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
-                    '${widget.socialPost.description}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Colors.black),
-                  ),
-                ),
-
-                //if there is a picture, show on post.
-                widget.socialPost.pic != null ?
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20)
-                        ),
-                        height: 200,
-                          child: Image.asset(widget.socialPost.pic!)
-                      ),
-                    ):
-                    const SizedBox()
-              ],
-            );
-  }
-
-
-  PopupMenuItem buildMenuItem(String title, IconData iconData){
-    return PopupMenuItem(child:
-    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        Icon(iconData),
-        Text(title),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            widget.socialPost.description,
+            style: Theme.of(context)
+                .textTheme
+                .bodySmall!
+                .copyWith(color: Colors.black),
+          ),
+        ),
+
+        //if there is a picture, show on post.
+        widget.socialPost.pic == null || widget.socialPost.pic == 'null' ||url.toString() == "null"
+            ?
+        const SizedBox():
+        Container(
+          decoration:
+              BoxDecoration(borderRadius: BorderRadius.circular(20)),
+         // height: 200,
+          child:
+
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.network(url.toString(),fit: BoxFit.fitWidth,
+                  ),
+                )
+
+        )
+
       ],
-    )
     );
   }
 
+  // PopupMenuItem buildMenuItem(
+  //     String title, IconData iconData, Function function) {
+  //   return PopupMenuItem(
+  //       child: Row(
+  //     children: [
+  //       IconButton(
+  //           onPressed: ()=> function,
+  //           icon: Icon(iconData)),
+  //       Text(title),
+  //     ],
+  //   ));
+  // }
 
   Widget TopRowButtons() {
     return Column(
@@ -116,14 +197,43 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: UserCircleWithInitials(client: widget.client),
+              padding: const EdgeInsets.only(left: 8.0),
+              child: UserCircleWithInitials(
+                firstName: widget.firstName,
+                lastName: widget.lastName,
+              ),
             ),
-            PopupMenuButton(itemBuilder: (context)=>
-            [
-              buildMenuItem('Delete', Icons.delete_outline)
-            ],
-            icon: const Icon(Icons.more_horiz_outlined),)
+            // PopupMenuButton(
+            //   itemBuilder: (context) => [
+            //     buildMenuItem('Delete', Icons.delete_outline, () {
+            //       socialFirebase.deletePost(widget.socialPost);
+            //     })
+            //   ],
+            //   icon: const Icon(Icons.more_horiz_outlined),
+            // )
+
+            Row(
+              children: [
+                IconButton(onPressed: () {
+                  setState(() {
+                    if(widget.socialPost.pic != null && widget.socialPost.pic != 'null' ) {
+                      var ref = FirebaseStorage.instance.ref().child(widget.socialPost.pic!);
+                      ref.getDownloadURL().then((value) => setState((){
+                        url = value;
+
+                        //url = 'https://${url!}';
+                      }));
+                    }
+                  });
+                }, icon: Icon(Icons.refresh_outlined)),
+                IconButton(
+                    onPressed: () {
+                      socialFirebase.deletePhoto(widget.socialPost);
+                      socialFirebase.deletePost(widget.socialPost);
+                    },
+                    icon: Icon(Icons.delete_outline))
+              ],
+            )
 
             // IconButton(
             //     onPressed: () {
@@ -143,13 +253,21 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               //display first and last name
-              Text(
-                "${widget.client.firstName} ${widget.client.lastName}",
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyMedium!
-                    .copyWith(color: Colors.black),
-              ),
+              widget.client != null
+                  ? Text(
+                      "${widget.client?.firstName} ${widget.client?.lastName}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.black),
+                    )
+                  : Text(
+                      "${widget.firstName} ${widget.lastName}",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodySmall!
+                          .copyWith(color: Colors.black),
+                    ),
 
               //display time and date
               Column(
@@ -176,4 +294,8 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> {
       ],
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

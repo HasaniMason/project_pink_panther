@@ -124,6 +124,10 @@ class _MyAppState extends State<MyApp> {
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).primaryColor)),
+            displaySmall: GoogleFonts.mrDafoe(
+                textStyle: const TextStyle(
+                  fontSize: 36,
+                )),
             displayMedium: GoogleFonts.mrDafoe(
                 textStyle: const TextStyle(
               fontSize: 48,
@@ -152,13 +156,8 @@ class _MyAppState extends State<MyApp> {
                     ?
                     //Open source code to display splash screen
                     AnimatedSplashScreen(
-                        splash: Text(
-                          'Logo Here',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium!
-                              .copyWith(color: const Color(0xffef6def)),
-                        ),
+                        splash: Container(height:200,
+                            child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')),
                         backgroundColor: Colors.black,
                         duration: 3000,
                         nextScreen: IntroductoryScreen(
@@ -169,13 +168,9 @@ class _MyAppState extends State<MyApp> {
                         pageTransitionType: PageTransitionType.fade,
                       )
                     : AnimatedSplashScreen(
-                        splash: Text(
-                          'Logo Here',
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium!
-                              .copyWith(color: const Color(0xffef6def)),
-                        ),
+                        splash: Container(
+                            height:200,
+                            child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')),
                         backgroundColor: Colors.black,
                         duration: 3000,
                         nextScreen: MainScreen(

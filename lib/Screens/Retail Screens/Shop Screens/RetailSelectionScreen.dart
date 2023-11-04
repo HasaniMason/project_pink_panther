@@ -28,6 +28,7 @@ class _RetailSelectionScreenState extends State<RetailSelectionScreen> {
       onWillPop: () async => false,
       child: Scaffold(
         appBar: AppBar(
+
           backgroundColor: Colors.black,
           leading: GestureDetector(
             onTap: (){
@@ -59,12 +60,12 @@ class _RetailSelectionScreenState extends State<RetailSelectionScreen> {
                   children: [
 
                 Container(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).colorScheme.secondary,
                   width: MediaQuery.of(context).size.width,
                 ),
 
                 Hero(tag: 'Hero',
-                    child: Text('Logo Here',style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.black),))
+                    child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png'))
 
               ]),
             ),
@@ -77,10 +78,10 @@ class _RetailSelectionScreenState extends State<RetailSelectionScreen> {
                 },
                 child: Stack(alignment: AlignmentDirectional.center, children: [
                   Container(
-                    color: Colors.grey[200],
+                    color: Theme.of(context).colorScheme.primary,
                     width: MediaQuery.of(context).size.width,
                   ),
-                  Text('Book Appointment',style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Theme.of(context).primaryColor),)
+                  Text('Book Appointment',style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Theme.of(context).colorScheme.secondary),)
                 ]),
               ),
             ),
@@ -92,7 +93,8 @@ class _RetailSelectionScreenState extends State<RetailSelectionScreen> {
                 },
                 child: Stack(alignment: AlignmentDirectional.center, children: [
                   Container(
-                    color: Theme.of(context).colorScheme.primary,
+
+                    color: Colors.white,
                     width: MediaQuery.of(context).size.width,
                   ),
                   Text('Shop',style: Theme.of(context).textTheme.displayMedium!.copyWith(color: Colors.black),)
