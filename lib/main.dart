@@ -124,6 +124,10 @@ class _MyAppState extends State<MyApp> {
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).primaryColor)),
+            displaySmall: GoogleFonts.mrDafoe(
+                textStyle: const TextStyle(
+                  fontSize: 36,
+                )),
             displayMedium: GoogleFonts.mrDafoe(
                 textStyle: const TextStyle(
               fontSize: 48,

@@ -3,17 +3,18 @@ import 'package:calendar_view/calendar_view.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 import '../../../Widgets/InputTextFieldWidgets.dart';
+import 'package:syncfusion_flutter_calendar/calendar.dart';
+
 
 class AddEventScreen extends StatefulWidget {
   DateTime selectedDate;
-  List<CalendarEventData>? eventData;
-  EventController eventController;
+  CalendarController calendarController;
 
   AddEventScreen(
       {super.key,
       required this.selectedDate,
-        required this.eventController,
-      this.eventData});
+        required this.calendarController
+      });
 
   @override
   State<AddEventScreen> createState() => _AddEventScreenState();
@@ -44,18 +45,15 @@ class _AddEventScreenState extends State<AddEventScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CalendarControllerProvider(
-      controller: EventController(),
-      child: Scaffold(
-        appBar: AppBar(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              Header(context),
-              Inputs(context),
-              BottomInfo(context),
-            ],
-          ),
+    return Scaffold(
+      appBar: AppBar(),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Header(context),
+            Inputs(context),
+            BottomInfo(context),
+          ],
         ),
       ),
     );
@@ -126,11 +124,12 @@ class _AddEventScreenState extends State<AddEventScreen> {
                           selectedTime?.hour ?? 7,
                           //selected time. If not input, chose 7 by default
                           selectedTime?.minute ?? 00),
-                      description:
-                          'Appointment w/ ${nameController.text}. Phone Number: ${phoneController.text}.  Email: ${emailController.text}. Date: ${widget.selectedDate} @ ${selectedTime ?? 'NO SPECIFIED TIME'}');
-                  widget.eventController.add(event);
+                  //     description:
+                  //         'Appointment w/ ${nameController.text}. Phone Number: ${phoneController.text}.  Email: ${emailController.text}. Date: ${widget.selectedDate} @ ${selectedTime ?? 'NO SPECIFIED TIME'}');
+                  // widget.eventController.add(event
+                  );
 
-                  print(event.description);
+                 // print(event.description);
                   Navigator.pop(context);
                 },
                 child: const Row(

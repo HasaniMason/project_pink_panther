@@ -3,17 +3,20 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:top_tier/Firebase/ClientFirebase/SocialFirebase.dart';
+import 'package:top_tier/Screens/Social%20Screens/MainSocialScreen.dart';
 import '/Custom%20Data/Clients.dart';
 import 'package:images_picker/images_picker.dart';
 
 import '../../Custom Data/SocialPost.dart';
 import '../../Widgets/UserCircleWithInitials.dart';
 
+
 class AddSocialPost extends StatefulWidget {
   Client client;
-  List<SocialPost> postList;
 
-  AddSocialPost({super.key, required this.client, required this.postList});
+
+
+  AddSocialPost({super.key, required this.client});
 
   @override
   State<AddSocialPost> createState() => _AddSocialPostState();
@@ -25,17 +28,9 @@ class _AddSocialPostState extends State<AddSocialPost> {
   SocialPost socialPost = SocialPost(
       description: '',
       postID: 'agaghhh',
-      client: Client(
-          firstName: '',
-          lastName: '',
-          email: '',
-          birthday: DateTime.now(),
-          id: '',
-          token: '',
-          activeAccount: false,
-          admin: false,
-          phoneNumber: '',
-          notificationsOn: true),
+      firstName: '',
+      lastName: '',
+      clientId: '',
       time: DateTime.now(),
       likes: 0);
 
@@ -51,7 +46,7 @@ class _AddSocialPostState extends State<AddSocialPost> {
     });
 
     if(path != null){
-
+      print(path);
     }
 
 //bool status = await ImagesPicker.saveImageToAlbum(File(res![0]!.thumbPath!));
@@ -62,7 +57,9 @@ class _AddSocialPostState extends State<AddSocialPost> {
   void initState() {
     super.initState();
 
-    socialPost.client = widget.client;  //assign client to social post
+    socialPost.clientId = widget.client.id; //assign client to social post
+    socialPost.firstName = widget.client.firstName;
+    socialPost.lastName = widget.client.lastName;
   }
 
   @override
@@ -127,7 +124,7 @@ class _AddSocialPostState extends State<AddSocialPost> {
                 onPressed: () {
                   getImage();
                 },
-                icon: Icon(Icons.attach_file_outlined),
+                icon: const Icon(Icons.attach_file_outlined),
               ),
 
               //Submit button to post
@@ -135,17 +132,18 @@ class _AddSocialPostState extends State<AddSocialPost> {
                 style: ElevatedButton.styleFrom(
                     shape: const StadiumBorder(),
                     backgroundColor: Theme.of(context).primaryColor),
-                onPressed: () {
+                onPressed: () async {
                   setState(() {
-                    socialPost?.description = editingController.text;
-                    socialPost?.time = DateTime.now();
+                    socialPost.description = editingController.text;
+                    socialPost.time = DateTime.now();
                     // socialPost?.pic = path;
 
-                    socialFirebase.addSocialPost(socialPost, widget.client);
                   });
-                  //assign variables to social post
 
-                  Navigator.pop(context);
+
+                 await socialFirebase.addSocialPost(socialPost, widget.client, path);
+
+                 Navigator.pop(context);
                 },
                 child: const Text(
                   "Post",
