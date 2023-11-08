@@ -8,7 +8,11 @@ class UserCircleWithInitials extends StatefulWidget {
   String? firstName;
   String? lastName;
 
-  UserCircleWithInitials({super.key, this.client, this.firstName, this.lastName});
+  double? maxRadius;
+  double? textSize;
+
+
+  UserCircleWithInitials({super.key, this.client, this.firstName, this.lastName, this.maxRadius, this.textSize});
 
   @override
   State<UserCircleWithInitials> createState() => _UserCircleWithInitialsState();
@@ -20,6 +24,7 @@ class _UserCircleWithInitialsState extends State<UserCircleWithInitials> {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: CircleAvatar(
+        maxRadius: widget.maxRadius ?? 20,
         backgroundColor: Theme.of(context).colorScheme.primary,
         child:
         widget.firstName != null ?
@@ -31,14 +36,14 @@ class _UserCircleWithInitialsState extends State<UserCircleWithInitials> {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
-                  .copyWith(color: Colors.black),
+                  .copyWith(color: Colors.black,fontSize: widget.textSize ?? 20),
             ),
             Text(widget.lastName?[0] ?? '',
                 style:
                 Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .copyWith(color: Colors.black))
+                    .copyWith(color: Colors.black,fontSize: widget.textSize ?? 20))
           ],
         ):
         Row(
@@ -49,14 +54,14 @@ class _UserCircleWithInitialsState extends State<UserCircleWithInitials> {
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
-                  .copyWith(color: Colors.black),
+                  .copyWith(color: Colors.black,fontSize: widget.textSize ?? 20),
             ),
             Text(widget.client?.lastName[0] ?? '',
                 style:
                 Theme.of(context)
                     .textTheme
                     .bodyMedium!
-                    .copyWith(color: Colors.black))
+                    .copyWith(color: Colors.black,fontSize: widget.textSize ?? 20))
           ],
         )
       ),

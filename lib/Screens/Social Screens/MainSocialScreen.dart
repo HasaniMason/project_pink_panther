@@ -74,7 +74,7 @@ class _MainSocialScreenState extends State<MainSocialScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: Text('Social Feed',
+              child: Text('News Feed',
                   style: Theme.of(context)
                       .textTheme
                       .displayMedium!

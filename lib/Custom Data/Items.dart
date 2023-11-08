@@ -19,9 +19,11 @@ class Item{
   double? cost;
   String? picLocation;
 
+  int? amountInCart;
+
 
   Item({required this.itemName, required this.retail, required this.itemID, required this.itemDescription,
-  required this.amountAvailable, required this.onSale, this.cost, this.picLocation, this.salePrice});
+  required this.amountAvailable, required this.onSale, this.cost, this.picLocation, this.salePrice, this.amountInCart});
 
 
   factory Item.fromFireStore(DocumentSnapshot<Map<String, dynamic>> snapshot,
@@ -35,7 +37,8 @@ class Item{
         onSale: data?['onSale'],
         cost: data?['cost'],
         picLocation: data?['picLocation'],
-    salePrice: data?['salePrice']);
+    salePrice: data?['salePrice'],
+    amountInCart: data?['amountInCart']);
   }
 
   Map<String, dynamic> toFireStore(){
@@ -48,7 +51,8 @@ class Item{
       'onSale': onSale,
       'cost': cost,
       'picLocation': picLocation,
-      'salePrice':salePrice
+      'salePrice':salePrice,
+      'amountInCart':amountInCart
     };
   }
 

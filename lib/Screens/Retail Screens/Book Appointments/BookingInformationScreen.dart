@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:top_tier/Custom%20Data/BookingEvents.dart';
+import 'package:top_tier/Firebase/ClientFirebase/BookedEventsFirebase.dart';
 import '/Custom%20Data/Clients.dart';
 
 class BookingInformationScreen extends StatefulWidget {
@@ -26,11 +27,13 @@ class _BookingInformationScreenState extends State<BookingInformationScreen> {
   List<DocumentSnapshot> bookingList = [];
 
   setUp() async {
+
+    bookingList = [];
     //get appointment belong to client for that date
     bookingStream = FirebaseFirestore.instance
         .collection('bookEvents')
-        .where('clientId', isEqualTo: widget.client.id)
-        //.where('day', isEqualTo: widget.details.date)
+        //.where('clientId', isEqualTo: widget.client.id)
+        //.where('day', isEqualTo: DateUtils.dateOnly(widget.details.date!))
         .snapshots();
 
     print(bookingStream.length);
@@ -149,14 +152,15 @@ class _BookingInformationScreenState extends State<BookingInformationScreen> {
                       clientId: bookingList[index]['clientId'],
                       clientEmail: bookingList[index]['clientEmail']);
 
-                  print("Booking date: ${thisBookingEvent.startTime}- Selected date:${widget.calendarController.selectedDate}");
+                  print("Booking date: ${DateUtils.dateOnly(thisBookingEvent.startTime)}- Selected date:${DateUtils.dateOnly(widget.calendarController.selectedDate!)}");
                   //if dates are same from as selected date
-                  if (thisBookingEvent.day
-                      .compareWithoutTime(widget.details.date!)) {
-                    return EventWidget(bookingEvent: thisBookingEvent);
-                  }else{
-                    const SizedBox();
-                  }
+
+                    return EventWidget(
+                       // key: ObjectKey(thisBookingEvent),
+                        bookingEvent: thisBookingEvent,
+                    client:  widget.client,
+                    calendarDetails: widget.details,
+                    context: context,);
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox();
@@ -172,8 +176,11 @@ class _BookingInformationScreenState extends State<BookingInformationScreen> {
 
 class EventWidget extends StatefulWidget {
   final BookingEvent bookingEvent;
+  final Client client;
+  final CalendarTapDetails calendarDetails;
+  final BuildContext context;
   
-   EventWidget({super.key, required this.bookingEvent});
+   EventWidget({super.key, required this.bookingEvent, required this.client, required this.calendarDetails, required this.context});
   
 
   @override
@@ -181,46 +188,61 @@ class EventWidget extends StatefulWidget {
 }
 
 class _EventWidgetState extends State<EventWidget> {
+
+  BookedEventsFirebase bookedEventsFirebase = BookedEventsFirebase();
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return
+      DateUtils.dateOnly(widget.calendarDetails.date!) == DateUtils.dateOnly(widget.bookingEvent.startTime) ?
+      Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.grey[100],
-          borderRadius: BorderRadius.all(Radius.circular(24)),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black,
-              blurRadius: 6
-            )
-          ]
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('${widget.bookingEvent.firstName} ${widget.bookingEvent.lastName}',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),),
-                  Text("Time -${widget.bookingEvent.startTime.hour}:${widget.bookingEvent.startTime.minute}",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor))
-                ],
+      child: GestureDetector(
+        onLongPress: (){
+          ///delete appointment and then close modal
+
+          bookedEventsFirebase.deleteEvent(widget.bookingEvent);
+          Navigator.pop(widget.context);
+        },
+
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey[100],
+            borderRadius: BorderRadius.all(Radius.circular(24)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black,
+                blurRadius: 6
+              )
+            ]
+          ),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('${widget.bookingEvent.firstName} ${widget.bookingEvent.lastName}',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),),
+                    Text("${widget.bookingEvent.startTime}"),
+                    Text("Time -${widget.bookingEvent.startTime.hour}:${widget.bookingEvent.startTime.minute}",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor))
+                  ],
+                ),
               ),
-            ),
 
-            Column(
-              children: [
-                widget.bookingEvent.approved ?
-                    Text('Appointment has been approved',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor)):
-                Text('Appointment has not been approved',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor))
+              Column(
+                children: [
+                  widget.bookingEvent.approved ?
+                      Text('Appointment has been approved',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor)):
+                  Text('Appointment has not been approved',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor))
 
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
       ),
-    );
+    ):
+          const SizedBox();
   }
 }
 

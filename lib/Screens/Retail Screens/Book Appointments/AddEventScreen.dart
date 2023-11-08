@@ -162,7 +162,7 @@ class _AddEventScreenState extends State<AddEventScreen> {
                   print(event.startTime);
                   // print(event.description);
 
-                  bookedEventsFirebase.bookEvent(widget.client, event);
+                  bookedEventsFirebase.bookEvent(widget.client, event, nameController.text,phoneController.text, emailController.text);
                   Navigator.pop(context);
                 },
                 child: const Row(
@@ -192,14 +192,14 @@ class _AddEventScreenState extends State<AddEventScreen> {
         child: Column(
           children: [
             //TextField to hold name
-            InputTextFieldWidget(controller: nameController, hintText: 'Name'),
+            InputTextFieldWidget(controller: nameController, hintText: 'Name',textInputType: TextInputType.text),
 
             //TextField to hold number
             InputTextFieldWidget(
-                controller: phoneController, hintText: 'Phone Number'),
+                controller: phoneController, hintText: 'Phone Number',textInputType: TextInputType.phone),
 
             InputTextFieldWidget(
-                controller: emailController, hintText: 'Email'),
+                controller: emailController, hintText: 'Email',textInputType: TextInputType.text),
 
             Padding(
               padding: const EdgeInsets.all(16.0),

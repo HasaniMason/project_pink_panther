@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:top_tier/Custom%20Data/Clients.dart';
 import 'package:top_tier/Custom%20Data/Enums/CreateAccountStatus.dart';
@@ -16,6 +17,8 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+
+  CreateAccountStatus createAccountStatus = CreateAccountStatus.weakPassword;
 
   //create empty client variable
   Client client = Client(
@@ -109,6 +112,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'First Name',
             textEditingController: firstNameController,
+            passwordText: false,
           ),
 
           //last name text field
@@ -119,6 +123,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Last Name',
             textEditingController: lastNameController,
+            passwordText: false,
           ),
 
           //email
@@ -129,6 +134,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Email',
             textEditingController: emailController,
+            passwordText: false,
           ),
 
           //phone number text field
@@ -139,6 +145,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Phone Number',
             textEditingController: phoneNumberController,
+            passwordText: false,
           ),
 
           //Password text field
@@ -149,6 +156,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Password',
             textEditingController: passwordController,
+            passwordText: true,
           ),
 
           //confirm password field
@@ -159,6 +167,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Confirm Password',
             textEditingController: confirmPasswordController,
+            passwordText: true,
           ),
 
           //visible divider
@@ -181,12 +190,21 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 client.email = emailController.text;
                 client.phoneNumber = phoneNumberController.text;
               });
-              status = await clientFirebase.createUser(client, passwordController.text);
-             // clientFirebase.createUserWithLinkToEmail(client);
-              if (status == CreateAccountStatus.success){
-                if(!mounted) return;
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)), (route) => false);
+
+              //if email is in use, display error, else create user and proceed
+              if(clientFirebase.isEmailInUse(emailController.text)){
+                print("Email In use");
+              }else{
+                createAccountStatus = await clientFirebase.createUser(client, passwordController.text);
+                // clientFirebase.createUserWithLinkToEmail(client);
+                if (createAccountStatus == CreateAccountStatus.success){
+                  if(!mounted) return;
+                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)), (route) => false);
+                }else{
+                  errorDialog(context, createAccountStatus);
+                }
               }
+
             },
             child: const Text(
               "Submit",
@@ -196,5 +214,28 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ],
       ),
     );
+  }
+
+  AwesomeDialog errorDialog(BuildContext context, CreateAccountStatus status){
+
+    String errorMessage = 'Error';
+    if(createAccountStatus == CreateAccountStatus.emailInUse){
+      errorMessage = 'Email in Use.';
+    }
+    if(createAccountStatus == CreateAccountStatus.weakPassword){
+      errorMessage = 'Weak password. Password must be at least 6 characters long.';
+    }
+    if(createAccountStatus == CreateAccountStatus.incorrectEmailFormat){
+      errorMessage = 'Incorrect email format. Please check email and try again.';
+    }
+
+
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      animType: AnimType.scale,
+      title: 'Error',
+      desc: errorMessage,
+    )..show();
   }
 }

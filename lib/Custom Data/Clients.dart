@@ -45,8 +45,8 @@ class Client {
         activeAccount: data?['activeAccount'],
         admin: data?['admin'],
     phoneNumber: data?['phoneNumber'],
-    notificationsOn: data?['notifications'],
-    nextBooking: data?['nextBooking']);
+    notificationsOn: data?['notifications'] ?? true,
+    nextBooking: data?['nextBooking'] ?? '');
   }
 
   Map<String, dynamic> toFireStore(){

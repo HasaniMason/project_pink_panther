@@ -37,7 +37,7 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> with AutomaticKeepA
   String? url;
 
   SocialFirebase socialFirebase = SocialFirebase();
-   Uint8List? imageBytes;
+   //Uint8List? imageBytes;
   String? errorMsg;
 
 

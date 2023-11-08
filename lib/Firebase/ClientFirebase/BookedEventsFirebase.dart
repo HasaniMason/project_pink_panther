@@ -9,10 +9,15 @@ import 'package:uuid/uuid.dart';
 class BookedEventsFirebase {
 
   //add appointment
-  bookEvent(Client client, BookingEvent bookingEvent) {
+  bookEvent(Client client, BookingEvent bookingEvent, String name, String phoneNumber, String email) {
     //get random number for id
     var uuid = const Uuid();
     var id = uuid.v4();
+
+bookingEvent.firstName = name;
+bookingEvent.lastName = '';
+bookingEvent.phoneNumber = phoneNumber;
+bookingEvent.clientEmail = email;
 
     bookingEvent.id = id;
 
@@ -28,10 +33,26 @@ class BookedEventsFirebase {
   }
 
 
+  deleteEvent(BookingEvent bookingEvent) async{
+    final docRef = FirebaseFirestore.instance
+        .collection('bookEvents')
+        .withConverter(
+        fromFirestore: BookingEvent.fromFireStore,
+        toFirestore: (BookingEvent bookingEvent, options) =>
+            bookingEvent.toFireStore())
+        .doc(bookingEvent.id);
+
+    docRef.delete();
+  }
+
+
   //get all appointments for user
   Future<List<Meeting>>getBookEventsForClient(Client client, BuildContext context) async {
+
     //create blank list
     List<Meeting> meetings = <Meeting>[];
+
+    print("Client Id: ${client.id}");
 
     //get documents in firebase that belongs to client
     final docRef = FirebaseFirestore.instance
@@ -48,7 +69,7 @@ class BookedEventsFirebase {
 
          print("Just entered: ${docSnapshot.data().startTime}"),
 
-        meetings.add(Meeting("Lash Appointment for ${client.firstName} ${client.lastName}. Phone: ${client.phoneNumber}", docSnapshot
+        meetings.add(Meeting("Lash Appointment for ${docSnapshot.data().firstName}. Phone: ${docSnapshot.data().phoneNumber}", docSnapshot
             .data()
             .startTime, docSnapshot
             .data()
@@ -62,7 +83,7 @@ class BookedEventsFirebase {
       }
     });
 
-    print(meetings.length);
+    print("meetings.lengths ${meetings.length}");
     return(meetings);
   }
 }

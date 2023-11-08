@@ -47,6 +47,10 @@ dependencies:
   firebase_cached_image: ^0.4.4
   flutter_timeline_calendar: ^1.0.9
   syncfusion_flutter_calendar: ^23.1.43
+  google_sign_in: ^6.1.5
+  awesome_dialog: ^3.1.0
+
+
 
 
 
@@ -54,10 +58,32 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   firebase_storage: ^11.4.1
+  sign_in_with_apple: ^5.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: ^0.13.1
+
+flutter_icons:
+  image_path: lib/Images/Top Tier Logos/TopTierLogo_AppV3.png
+  image_path_ios: lib/Images/Top Tier Logos/TopTierLogo_AppV3.png
+  image_path_android: lib/Images/Top Tier Logos/TopTierLogo_AppV3.png
+  android: true
+  ios: true
+  remove_alpha_ios: true
+
+flutter_launcher_icons:
+  image_path_android: "lib/Images/Top Tier Logos/TopTierLogo_AppV3.png"
+  image_path_ios: "lib/Images/Top Tier Logos/TopTierLogo_AppV3.png"
+  android: true
+  ios: true
+  min_sdk_android: 21
+  remove_alpha_ios: true
+
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -88,6 +114,7 @@ flutter:
    - lib/Images/Top Tier Logos/TopTierLogo_AppV2.png
    - lib/Images/Top Tier Logos/TopTierLogo_AppV3.png
    - lib/Images/Top Tier Logos/TopTierLogo_TRNS.png
+   - lib/Images/appleLogoo.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -1,8 +1,10 @@
 import 'package:cupertino_modal_sheet/cupertino_modal_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_timeline_calendar/timeline/flutter_timeline_calendar.dart';
+import 'package:top_tier/AdminRoles/AdminAppointments/AppointmentsAdminScreen.dart';
 import 'package:top_tier/Firebase/ClientFirebase/BookedEventsFirebase.dart';
 import 'package:top_tier/Screens/Retail%20Screens/Book%20Appointments/BookingInformationScreen.dart';
+import '../../../AdminRoles/AdminShop/ShopAdminScreen.dart';
 import '../../../Widgets/UserCircleWithInitials.dart';
 import 'package:calendar_view/calendar_view.dart';
 import '../../../Custom Data/Clients.dart';
@@ -50,10 +52,21 @@ class _OpeningAppointmentScreenState extends State<OpeningAppointmentScreen> {
       return Scaffold(
           appBar: AppBar(
 
+            actions: [
+              if (widget.client.admin)
+                IconButton(
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context)=>AppointmentsAdminScreen()));
+                    },
+                    icon: Icon(Icons.admin_panel_settings_outlined)),
+            ],
 
-            title: SizedBox(
-              height: 100,
-                child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')),
+            title: Hero(
+              tag: 'Hero',
+              child: SizedBox(
+                height: 100,
+                  child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')),
+            ),
             centerTitle: true,
             //to center title/logo
             backgroundColor: Colors.white,
@@ -61,9 +74,6 @@ class _OpeningAppointmentScreenState extends State<OpeningAppointmentScreen> {
               client: widget.client,
             ),
 
-            //user circle avatar
-
-            actions: [],
           ),
           body: Column(
             children: [
@@ -103,6 +113,7 @@ class _OpeningAppointmentScreenState extends State<OpeningAppointmentScreen> {
                         endHour: 16,
                         nonWorkingDays: <int>[DateTime.sunday]),
 
+                    onLongPress: null,
                     onTap: calendarTapped,
                     showDatePickerButton: true,
                   ),

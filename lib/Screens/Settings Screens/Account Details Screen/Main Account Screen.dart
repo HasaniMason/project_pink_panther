@@ -43,15 +43,14 @@ class _MainAccountScreenState extends State<MainAccountScreen> {
                         children: [
                           Row(
                             children: [
-                              Text('Next Appointment: ',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.primary),),
+                              //Text('Next Appointment: ',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.primary),),
 
                               ///insert appointment info here
                             ],
                           ),
                           ElevatedButton(onPressed: (){}, child: Text("Edit Phone Number",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),)),
-                          ElevatedButton(onPressed: (){}, child: Text("Email Top Tier",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),)),
-
-                          Text("Logo Here",style: Theme.of(context).textTheme.displayMedium,)
+                          //ElevatedButton(onPressed: (){}, child: Text("Email Top Tier",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),)),
+                        Container(height: 100,child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png'))
                         ],
                       )
                   )

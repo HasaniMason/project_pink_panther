@@ -1,11 +1,10 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:cupertino_modal_sheet/cupertino_modal_sheet.dart';
 import 'package:top_tier/Custom%20Data/Clients.dart';
 import 'package:top_tier/Custom%20Data/Enums/SignInStatus.dart';
 import 'package:top_tier/Firebase/ClientFirebase/ClientFirebase.dart';
-import 'package:top_tier/Screens/Retail%20Screens/Shop%20Screens/OpeningRetailScreen.dart';
-import 'package:top_tier/Screens/Retail%20Screens/Shop%20Screens/RetailSelectionScreen.dart';
 import 'package:top_tier/Screens/mainScreen.dart';
 
 import '../../Widgets/TextFieldWidgets.dart';
@@ -14,7 +13,7 @@ import 'SignUpScreen.dart';
 class IntroductoryScreen extends StatefulWidget {
   ClientFirebase clientFirebase;
 
-  IntroductoryScreen({required this.clientFirebase});
+  IntroductoryScreen({super.key, required this.clientFirebase});
 
   @override
   State<IntroductoryScreen> createState() => _IntroductoryScreenState();
@@ -89,7 +88,8 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
       children: [
         Container(
            // height: 250,
-            child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png',fit: BoxFit.fitHeight,)),
+            child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png',fit: BoxFit.fitHeight,),
+        ),
 
         //Image Carousel
         FanCarouselImageSlider(
@@ -134,6 +134,7 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
               ),
               hintText: 'Email',
               textEditingController: emailController,
+              passwordText: false,
             ),
 
             //Text field for password
@@ -144,6 +145,7 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
               ),
               hintText: 'Password',
               textEditingController: passwordController,
+              passwordText: true,
             ),
 
 
@@ -157,10 +159,16 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
 
                  signInStatus = await widget.clientFirebase.signIn(emailController.text, passwordController.text);
 
-                 Client client = await widget.clientFirebase.getClient();
+                 print('Sign in Status: $signInStatus');
+
+                 signInStatus != SignInStatus.success ?
+                 errorDialog(context, signInStatus!): null;
+
+
+                 {Client client = await widget.clientFirebase.getClient();
 
                  if(client.firstName != 'Not Signed In')
-                 Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)));
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)));}
 
               },
               child: const Text(
@@ -178,33 +186,9 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
             ),
 
             //Button to sign in with google
-            Padding(
-              padding: const EdgeInsets.only(
-                  left: 24.0, right: 24.0, top: 8.0, bottom: 8.0),
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                    shape: const StadiumBorder(),
-                    backgroundColor: Colors.white),
-                onPressed: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SizedBox(
-                        width: 30,
-                        height: 30,
-                        child: Image.asset('lib/Images/GoogleIcon.png'),
-                      ),
-                    ),
-                    Text(
-                      "Login with Google",
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            alternateSignInButtons(),
+
+
 
             //Sign Up Button
             Padding(
@@ -237,5 +221,110 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
         ),
       ),
     );
+  }
+
+  Widget alternateSignInButtons() {
+    return Column(
+            children: [
+
+              //google button
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0, left: 24, right: 24),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: const StadiumBorder(),
+                      backgroundColor: Colors.white),
+                  onPressed: () async {
+                    Client client = await widget.clientFirebase.signInWithGoogle();
+
+
+                    if(client.firstName != 'Not Signed In')
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)));
+
+                  },
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SizedBox(
+                          width: 30,
+                          height: 30,
+                          child: Image.asset('lib/Images/GoogleIcon.png'),
+                        ),
+                      ),
+                      Text(
+                        "Login with Google",
+                        style: TextStyle(color: Theme.of(context).primaryColor),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              //apple button
+              // Padding(
+              //   padding: const EdgeInsets.only(right: 24.0, left: 24),
+              //   child: ElevatedButton(
+              //     style: ElevatedButton.styleFrom(
+              //         shape: const StadiumBorder(),
+              //         backgroundColor: Colors.white),
+              //     onPressed: () async {
+              //       await widget.clientFirebase.signInWithApple();
+              //
+              //
+              //       // if(client.firstName != 'Not Signed In')
+              //       //   Navigator.push(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)));
+              //
+              //     },
+              //     child: Row(
+              //       mainAxisAlignment: MainAxisAlignment.center,
+              //       children: [
+              //         Padding(
+              //           padding: const EdgeInsets.all(8.0),
+              //           child: SizedBox(
+              //             width: 30,
+              //             height: 30,
+              //             child: Image.asset('lib/Images/appleLogoo.png'),
+              //           ),
+              //         ),
+              //         Text(
+              //           "Login with Apple",
+              //           style: TextStyle(color: Theme.of(context).primaryColor),
+              //         ),
+              //       ],
+              //     ),
+              //   ),
+              // ),
+            ],
+          );
+  }
+
+  AwesomeDialog errorDialog(BuildContext context, SignInStatus status){
+
+    String errorMessage = 'Error';
+    if(signInStatus == SignInStatus.invalidCred){
+      errorMessage = 'Invalid Credentials. If you created an account using Google or Apple, sign in using the options below.';
+    }
+    if(signInStatus == SignInStatus.invalidEmail){
+      errorMessage = 'Invalid email. If you created an account using Google or Apple, sign in using the options below.';
+    }
+    if(signInStatus == SignInStatus.wrongPassword){
+      errorMessage = 'Wrong password. If you created an account using Google or Apple, sign in using the options below.';
+    }
+    if(signInStatus == SignInStatus.userNotFound){
+      errorMessage = 'User not found. If you created an account using Google or Apple, sign in using the options below.';
+    }
+    if(signInStatus == SignInStatus.disabled){
+      errorMessage = 'Account disabled. Contact admin if you think this is a mistake.';
+    }
+
+    return AwesomeDialog(
+      context: context,
+      dialogType: DialogType.error,
+      animType: AnimType.scale,
+      title: 'Error',
+      desc: errorMessage,
+    )..show();
   }
 }

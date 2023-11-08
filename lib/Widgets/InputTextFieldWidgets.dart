@@ -5,11 +5,13 @@ class InputTextFieldWidget extends StatefulWidget {
   Color? iconColor;
   String hintText;
   TextEditingController controller;
+  TextInputType textInputType;
 
   InputTextFieldWidget(
       {super.key,
        required this.controller,
         required this.hintText,
+        required this.textInputType,
         this.iconColor});
 
   @override
@@ -24,6 +26,7 @@ class _InputTextFieldWidgetState extends State<InputTextFieldWidget> {
       padding: const EdgeInsets.only(
           left: 24.0, right: 24.0, top: 8.0, bottom: 8.0),
       child: TextField(
+        keyboardType: widget.textInputType,
         controller: widget.controller,
         decoration: InputDecoration(
             filled: true,
