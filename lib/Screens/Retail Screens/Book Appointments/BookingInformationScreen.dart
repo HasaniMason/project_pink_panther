@@ -26,11 +26,13 @@ class _BookingInformationScreenState extends State<BookingInformationScreen> {
   List<DocumentSnapshot> bookingList = [];
 
   setUp() async {
+
+    bookingList = [];
     //get appointment belong to client for that date
     bookingStream = FirebaseFirestore.instance
         .collection('bookEvents')
-        .where('clientId', isEqualTo: widget.client.id)
-        //.where('day', isEqualTo: widget.details.date)
+        //.where('clientId', isEqualTo: widget.client.id)
+        //.where('day', isEqualTo: DateUtils.dateOnly(widget.details.date!))
         .snapshots();
 
     print(bookingStream.length);
@@ -149,14 +151,14 @@ class _BookingInformationScreenState extends State<BookingInformationScreen> {
                       clientId: bookingList[index]['clientId'],
                       clientEmail: bookingList[index]['clientEmail']);
 
-                  print("Booking date: ${thisBookingEvent.startTime}- Selected date:${widget.calendarController.selectedDate}");
+                  print("Booking date: ${DateUtils.dateOnly(thisBookingEvent.startTime)}- Selected date:${DateUtils.dateOnly(widget.calendarController.selectedDate!)}");
                   //if dates are same from as selected date
-                  if (thisBookingEvent.day
-                      .compareWithoutTime(widget.details.date!)) {
-                    return EventWidget(bookingEvent: thisBookingEvent);
-                  }else{
-                    const SizedBox();
-                  }
+
+                    return EventWidget(
+                       // key: ObjectKey(thisBookingEvent),
+                        bookingEvent: thisBookingEvent,
+                    client:  widget.client,
+                    calendarDetails: widget.details,);
                 },
                 separatorBuilder: (BuildContext context, int index) {
                   return const SizedBox();
@@ -172,8 +174,10 @@ class _BookingInformationScreenState extends State<BookingInformationScreen> {
 
 class EventWidget extends StatefulWidget {
   final BookingEvent bookingEvent;
+  final Client client;
+  final CalendarTapDetails calendarDetails;
   
-   EventWidget({super.key, required this.bookingEvent});
+   EventWidget({super.key, required this.bookingEvent, required this.client, required this.calendarDetails});
   
 
   @override
@@ -183,7 +187,9 @@ class EventWidget extends StatefulWidget {
 class _EventWidgetState extends State<EventWidget> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return
+      DateUtils.dateOnly(widget.calendarDetails.date!) == DateUtils.dateOnly(widget.bookingEvent.startTime) ?
+      Padding(
       padding: const EdgeInsets.only(left: 16.0, right: 16),
       child: Container(
         decoration: BoxDecoration(
@@ -204,6 +210,7 @@ class _EventWidgetState extends State<EventWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text('${widget.bookingEvent.firstName} ${widget.bookingEvent.lastName}',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),),
+                  Text("${widget.bookingEvent.startTime}"),
                   Text("Time -${widget.bookingEvent.startTime.hour}:${widget.bookingEvent.startTime.minute}",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor))
                 ],
               ),
@@ -220,7 +227,8 @@ class _EventWidgetState extends State<EventWidget> {
           ],
         ),
       ),
-    );
+    ):
+          const SizedBox();
   }
 }
 

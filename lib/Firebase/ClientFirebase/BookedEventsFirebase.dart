@@ -30,8 +30,11 @@ class BookedEventsFirebase {
 
   //get all appointments for user
   Future<List<Meeting>>getBookEventsForClient(Client client, BuildContext context) async {
+
     //create blank list
     List<Meeting> meetings = <Meeting>[];
+
+    print("Client Id: ${client.id}");
 
     //get documents in firebase that belongs to client
     final docRef = FirebaseFirestore.instance
@@ -62,7 +65,7 @@ class BookedEventsFirebase {
       }
     });
 
-    print(meetings.length);
+    print("meetings.lengths ${meetings.length}");
     return(meetings);
   }
 }

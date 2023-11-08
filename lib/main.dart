@@ -9,7 +9,7 @@ import 'package:top_tier/Screens/mainScreen.dart';
 import 'Custom%20Data/Clients.dart';
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 
-import 'Screens/Retail%20Screens/Shop%20Screens/RetailSelectionScreen.dart';
+import 'Screens/Retail Screens/RetailSelectionScreen.dart';
 import 'Screens/Social%20Screens/MainSocialScreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'Screens/Settings Screens/OpeningSettingScreen.dart';
@@ -72,6 +72,8 @@ class _MyAppState extends State<MyApp> {
               toFirestore: (Client client, options) => client.toFireStore());
 
       final docSnap = await docRef.get(); // get data
+
+      print('${FirebaseAuth.instance.currentUser!.uid}');
 
       client = docSnap.data()!; //return data
 

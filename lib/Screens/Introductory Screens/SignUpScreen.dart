@@ -109,6 +109,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'First Name',
             textEditingController: firstNameController,
+            passwordText: false,
           ),
 
           //last name text field
@@ -119,6 +120,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Last Name',
             textEditingController: lastNameController,
+            passwordText: false,
           ),
 
           //email
@@ -129,6 +131,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Email',
             textEditingController: emailController,
+            passwordText: false,
           ),
 
           //phone number text field
@@ -139,6 +142,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Phone Number',
             textEditingController: phoneNumberController,
+            passwordText: false,
           ),
 
           //Password text field
@@ -149,6 +153,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Password',
             textEditingController: passwordController,
+            passwordText: true,
           ),
 
           //confirm password field
@@ -159,6 +164,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ),
             hintText: 'Confirm Password',
             textEditingController: confirmPasswordController,
+            passwordText: true,
           ),
 
           //visible divider

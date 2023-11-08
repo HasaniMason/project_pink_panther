@@ -18,7 +18,8 @@ class _OpeningSettingScreenState extends State<OpeningSettingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
+        //to remove back navigation button
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
@@ -39,9 +40,9 @@ class _OpeningSettingScreenState extends State<OpeningSettingScreen> {
           //list of settings item
           settingsItems(context),
 
-          SizedBox(
-            height: 150,
-          ),
+          // SizedBox(
+          //   height: 150,
+          // ),
 
           CITexQoute(context)
         ],

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:top_tier/main.dart';
-import '../../../Custom Data/Clients.dart';
+import '../../Custom Data/Clients.dart';
 import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 
-import '../../../Firebase/ClientFirebase/ClientFirebase.dart';
-import '../../../Widgets/UserCircleWithInitials.dart';
-import '../Book Appointments/OpeningAppointmentsScreen.dart';
-import 'OpeningRetailScreen.dart';
+import '../../Firebase/ClientFirebase/ClientFirebase.dart';
+import '../../Widgets/UserCircleWithInitials.dart';
+import 'Book Appointments/OpeningAppointmentsScreen.dart';
+import 'Shop Screens/OpeningRetailScreen.dart';
 
 
 class RetailSelectionScreen extends StatefulWidget {

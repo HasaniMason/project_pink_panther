@@ -51,9 +51,12 @@ class _OpeningAppointmentScreenState extends State<OpeningAppointmentScreen> {
           appBar: AppBar(
 
 
-            title: SizedBox(
-              height: 100,
-                child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')),
+            title: Hero(
+              tag: 'Hero',
+              child: SizedBox(
+                height: 100,
+                  child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')),
+            ),
             centerTitle: true,
             //to center title/logo
             backgroundColor: Colors.white,
@@ -61,9 +64,6 @@ class _OpeningAppointmentScreenState extends State<OpeningAppointmentScreen> {
               client: widget.client,
             ),
 
-            //user circle avatar
-
-            actions: [],
           ),
           body: Column(
             children: [
