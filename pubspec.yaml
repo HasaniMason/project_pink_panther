@@ -1,5 +1,5 @@
 name: "top_tier"
-description: "Project Pink Panther."
+description: "Top Tier."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.1.0+4
 
 environment:
   sdk: '>=3.2.0-42.2.beta <4.0.0'
@@ -49,6 +49,12 @@ dependencies:
   syncfusion_flutter_calendar: ^23.1.43
   google_sign_in: ^6.1.5
   awesome_dialog: ^3.1.0
+  flutter_stripe: ^9.5.0+1
+  http: ^1.1.0
+  flutter_dotenv: ^5.0.2
+  url_launcher: ^6.2.1
+  animation_search_bar: 0.0.10
+  firebase_messaging: ^14.7.4
 
 
 
@@ -59,6 +65,8 @@ dependencies:
   cupertino_icons: ^1.0.2
   firebase_storage: ^11.4.1
   sign_in_with_apple: ^5.0.0
+  firebase_app_check: ^0.2.1+4
+  rxdart: ^0.27.7
 
 dev_dependencies:
   flutter_test:
@@ -115,6 +123,7 @@ flutter:
    - lib/Images/Top Tier Logos/TopTierLogo_AppV3.png
    - lib/Images/Top Tier Logos/TopTierLogo_TRNS.png
    - lib/Images/appleLogoo.png
+   - lib/Keys/.env
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:images_picker/images_picker.dart';
 
 import '../../Custom Data/Items.dart';
-import '../../Firebase/ClientFirebase/ItemCatalogFirebase.dart';
+import '../../Firebase/Firebase/ItemCatalogFirebase.dart';
 import '../../Widgets/InputTextFieldWidgets.dart';
 
 
@@ -27,7 +27,7 @@ class _EditShopItemState extends State<EditShopItem> {
 
   String? picLocation;
 
-  Item item = Item(itemName: '', retail: 1.00, itemID: '', itemDescription: '', amountAvailable: 5, onSale: false);
+  //Item item = Item(itemName: '', retail: 1.00, itemID: '', itemDescription: '', amountAvailable: 5, onSale: false);
 
   ItemCatalogFirebase itemCatalogFirebase = ItemCatalogFirebase();
   bool onSale = false;
@@ -69,7 +69,12 @@ class _EditShopItemState extends State<EditShopItem> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(onPressed: (){}, icon: Icon(Icons.delete_outline))
+          IconButton(onPressed: (){
+            itemCatalogFirebase.deleteItem(widget.item);
+
+            Navigator.pop(context);
+            Navigator.pop(context);
+          }, icon: Icon(Icons.delete_outline))
         ],
         title: Container(
             height: 100,
@@ -122,23 +127,23 @@ class _EditShopItemState extends State<EditShopItem> {
 
           setState(() {
 
-            item.itemName = itemNameController.text;
-            item.retail = double.parse(retailController.text);
-            item.itemDescription = itemDescription.text;
-            item.amountAvailable = int.parse(amountAvailable.text);
+            widget.item.itemName = itemNameController.text;
+            widget.item.retail = double.parse(retailController.text);
+            widget.item.itemDescription = itemDescription.text;
+            widget.item.amountAvailable = int.parse(amountAvailable.text);
 
-            if(item.onSale){
-              item.salePrice = double.parse(salePriceController.text);
+            if( widget.item.onSale){
+              widget.item.salePrice = double.parse(salePriceController.text);
             }
 
             if(costController.text.isNotEmpty){
-              item.cost = double.parse(costController.text);
+              widget.item.cost = double.parse(costController.text);
             }
 
           });
 
           ///method for update
-          //await itemCatalogFirebase.addItemToCatalog(item,path);
+          await itemCatalogFirebase.updateItem( widget.item, path);
 
           Navigator.pop(context);
         }, child: Text("Update Item")),
@@ -167,16 +172,16 @@ class _EditShopItemState extends State<EditShopItem> {
           child: Row(
             children: [
               Flexible(child: Text('Start Item on a sale? Can be changed later.',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),textAlign: TextAlign.center,)),
-              Switch(value: item.onSale, onChanged: (value)=>{
+              Switch(value:  widget.item.onSale, onChanged: (value)=>{
                 setState((){
-                  item.onSale = value;
+                  widget.item.onSale = value;
                 })
               }),
             ],
           ),
         ),
 
-        item.onSale ?
+        widget.item.onSale ?
         InputTextFieldWidget(controller: salePriceController, hintText: 'Enter Sale Price',textInputType:TextInputType.numberWithOptions(decimal: true)):
         const SizedBox(),
 

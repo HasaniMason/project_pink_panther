@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 import 'package:top_tier/Custom%20Data/BookingEvents.dart';
-import 'package:top_tier/Firebase/ClientFirebase/BookedEventsFirebase.dart';
+import '../../../Firebase/Firebase/BookedEventsFirebase.dart';
 import '/Custom%20Data/Clients.dart';
 
 class BookingInformationScreen extends StatefulWidget {
@@ -150,7 +150,8 @@ class _BookingInformationScreenState extends State<BookingInformationScreen> {
                       lashType: bookingList[index]['lashType'],
                       phoneNumber: bookingList[index]['phoneNumber'],
                       clientId: bookingList[index]['clientId'],
-                      clientEmail: bookingList[index]['clientEmail']);
+                      clientEmail: bookingList[index]['clientEmail'],
+                  description: bookingList[index]['description']);
 
                   print("Booking date: ${DateUtils.dateOnly(thisBookingEvent.startTime)}- Selected date:${DateUtils.dateOnly(widget.calendarController.selectedDate!)}");
                   //if dates are same from as selected date
@@ -223,8 +224,8 @@ class _EventWidgetState extends State<EventWidget> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text('${widget.bookingEvent.firstName} ${widget.bookingEvent.lastName}',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),),
-                    Text("${widget.bookingEvent.startTime}"),
-                    Text("Time -${widget.bookingEvent.startTime.hour}:${widget.bookingEvent.startTime.minute}",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor))
+                    Text('Date: ${widget.bookingEvent.startTime.month}/${widget.bookingEvent.startTime.day}/${widget.bookingEvent.startTime.year}',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).colorScheme.primary),),
+                    Text("Time: ${widget.bookingEvent.startTime.hour}:${widget.bookingEvent.startTime.minute}",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor))
                   ],
                 ),
               ),
@@ -233,7 +234,9 @@ class _EventWidgetState extends State<EventWidget> {
                 children: [
                   widget.bookingEvent.approved ?
                       Text('Appointment has been approved',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor)):
-                  Text('Appointment has not been approved',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor))
+                  Text('Appointment has not been approved',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor)),
+
+                  Text('Service: ${widget.bookingEvent.description}',style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor))
 
                 ],
               )

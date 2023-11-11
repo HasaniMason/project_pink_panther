@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:top_tier/Firebase/ClientFirebase/SocialFirebase.dart';
 import 'package:top_tier/Screens/Social%20Screens/MainSocialScreen.dart';
+import '../../Firebase/Firebase/SocialFirebase.dart';
 import '/Custom%20Data/Clients.dart';
 import 'package:images_picker/images_picker.dart';
 

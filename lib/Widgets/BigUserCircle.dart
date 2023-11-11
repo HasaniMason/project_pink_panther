@@ -30,12 +30,14 @@ class _BigUserCircleState extends State<BigUserCircle> {
                     .displayMedium!
                     .copyWith(color: Colors.black),
               ),
+
+              widget.client.lastName.isNotEmpty ?
               Text(widget.client?.lastName[0] ?? '',
                   style:
                   Theme.of(context)
                       .textTheme
                       .displayMedium!
-                      .copyWith(color: Colors.black))
+                      .copyWith(color: Colors.black)):const SizedBox()
             ],
           )
       ),

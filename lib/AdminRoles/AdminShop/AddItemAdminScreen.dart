@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:images_picker/images_picker.dart';
 import 'package:top_tier/Custom%20Data/Items.dart';
-import 'package:top_tier/Firebase/ClientFirebase/ItemCatalogFirebase.dart';
 import 'package:top_tier/Widgets/InputTextFieldWidgets.dart';
+
+import '../../Firebase/Firebase/ItemCatalogFirebase.dart';
 
 
 

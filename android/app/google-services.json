@@ -12,7 +12,28 @@
           "package_name": "com.CITex.TopTier.project_pink_panther"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "992918306136-d136qf7vjhmhedgacq8robv6t3t96obs.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.CITex.TopTier.project_pink_panther",
+            "certificate_hash": "febb0c010183a4a1d003235c16f39c79539a2c96"
+          }
+        },
+        {
+          "client_id": "992918306136-dlmd6dv0m9gk7tpqh991m62bgbthm7fe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.CITex.TopTier.project_pink_panther",
+            "certificate_hash": "a50e861b4195e1b71c154ae4fc4938717ce06737"
+          }
+        },
+        {
+          "client_id": "992918306136-0h39td5e1jq4co03jv4a644g57ib24gd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyC6cgBKuug0QKxt_R-noYZWdNz_IxqgB0M"
@@ -20,7 +41,19 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "992918306136-0h39td5e1jq4co03jv4a644g57ib24gd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "992918306136-ah6u8icci0redajiels1rbi0ltl84ul8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.TopTier.projectPinkPantherCitex"
+              }
+            }
+          ]
         }
       }
     }

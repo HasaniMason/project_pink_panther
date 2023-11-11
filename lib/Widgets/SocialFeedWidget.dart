@@ -3,10 +3,10 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:top_tier/Firebase/ClientFirebase/SocialFirebase.dart';
 
 import '../Custom Data/Clients.dart';
 import '../Custom Data/SocialPost.dart';
+import '../Firebase/Firebase/SocialFirebase.dart';
 import 'UserCircleWithInitials.dart';
 import 'package:firebase_cached_image/firebase_cached_image.dart';
 
@@ -226,12 +226,15 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> with AutomaticKeepA
                     }
                   });
                 }, icon: Icon(Icons.refresh_outlined)),
+
+                widget.client!.id == widget.socialPost.clientId  || widget.client!.admin ?
                 IconButton(
                     onPressed: () {
                       socialFirebase.deletePhoto(widget.socialPost);
                       socialFirebase.deletePost(widget.socialPost);
                     },
-                    icon: Icon(Icons.delete_outline))
+                    icon: Icon(Icons.delete_outline)):
+                    const SizedBox()
               ],
             )
 
@@ -253,21 +256,27 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> with AutomaticKeepA
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               //display first and last name
-              widget.client != null
-                  ? Text(
-                      "${widget.client?.firstName} ${widget.client?.lastName}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.black),
-                    )
-                  : Text(
-                      "${widget.firstName} ${widget.lastName}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.black),
-                    ),
+
+                   Row(
+                     children: [
+                       Text(
+                          "${widget.firstName}",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(color: Colors.black),
+                        ),
+
+                       widget.lastName!.isNotEmpty ?
+                       Text(
+                         "${widget.lastName}",
+                         style: Theme.of(context)
+                             .textTheme
+                             .bodySmall!
+                             .copyWith(color: Colors.black),
+                       ): const SizedBox()
+                     ],
+                   ),
 
               //display time and date
               Column(

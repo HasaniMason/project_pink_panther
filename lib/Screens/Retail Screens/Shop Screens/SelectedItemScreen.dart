@@ -1,23 +1,23 @@
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:top_tier/Firebase/ClientFirebase/ShoppingCartFirebase.dart';
 
 import '../../../Custom Data/Clients.dart';
 import '../../../Custom Data/Items.dart';
+import '../../../Firebase/Firebase/ShoppingCartFirebase.dart';
 
 class SelectedItemScreen extends StatefulWidget {
   Client client;
   Item item;
   String? url;
 
-  SelectedItemScreen({super.key, required this.client, required this.item, this.url});
+  SelectedItemScreen(
+      {super.key, required this.client, required this.item, this.url});
 
   @override
   State<SelectedItemScreen> createState() => _SelectedItemScreenState();
 }
 
 class _SelectedItemScreenState extends State<SelectedItemScreen> {
-
   ShoppingCartFirebase shoppingCartFirebase = ShoppingCartFirebase();
 
   String? url;
@@ -29,10 +29,10 @@ class _SelectedItemScreenState extends State<SelectedItemScreen> {
       //print(widget.item.picLocation);
       try {
         await ref.getDownloadURL().then((value) => setState(() {
-          url = value;
+              url = value;
 
-          //url = 'https://${url!}';
-        }));
+              //url = 'https://${url!}';
+            }));
       } on FirebaseStorage catch (e) {
         print('Did not get URL');
       }
@@ -42,63 +42,85 @@ class _SelectedItemScreenState extends State<SelectedItemScreen> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: setUp(),
-      builder: (BuildContext context, AsyncSnapshot text){
-      return Scaffold(
-        // appBar: AppBar(
-        //   backgroundColor: Colors.white,
-        // ),
-        body: Container(
-          decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).primaryColor,
-                width: 3,
-              ),
-              borderRadius: BorderRadius.circular(24)),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.item.itemName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .displayMedium!
-                              .copyWith(
-                                  color: Theme.of(context).colorScheme.primary),
-                          textAlign: TextAlign.center,
-                        ),
-                        Text(
-                          "Amount Avail: ${widget.item.amountAvailable}",
-                          style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                              color: Theme.of(context).colorScheme.primary),
-                        )
-                      ],
-                    ),
+        future: setUp(),
+        builder: (BuildContext context, AsyncSnapshot text) {
+          return Scaffold(
+            appBar: AppBar(
+              backgroundColor: Colors.white,
+            ),
+            body: Container(
+              decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).primaryColor,
+                    width: 3,
                   ),
+                  borderRadius: BorderRadius.circular(24)),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              widget.item.itemName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .displayMedium!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                              textAlign: TextAlign.center,
+                            ),
+                            Text(
+                              "Amount Avail: ${widget.item.amountAvailable}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodySmall!
+                                  .copyWith(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary),
+                            )
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  //item image
+                  url == null
+                      ? Image.asset("lib/Images/Image_not_available.png")
+                      : Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 8,
+                            color: Theme.of(context).colorScheme.primary
+                          )
+                        ]
+                    ),
+                            height: 300,
+                            child: ClipRRect(
+                                borderRadius: BorderRadius.circular(20),
+                                child: Image.network(url.toString(),
+                                    fit: BoxFit.fill))),
+                      ),
+
+                  //widget for item info
+                  itemInfo()
                 ],
               ),
-
-              //item image
-              url == null ?
-              Image.asset("lib/Images/Image_not_available.png"):
-                  Image.network(url.toString(),fit: BoxFit.fitWidth),
-
-              //widget for item info
-              itemInfo()
-            ],
-          ),
-        ),
-      );
-  }
-    );
+            ),
+          );
+        });
   }
 
   Widget itemInfo() {
@@ -144,7 +166,8 @@ class _SelectedItemScreenState extends State<SelectedItemScreen> {
                         width: 25,
                       ),
                       if (widget.item.salePrice != null)
-                        Text("\$${widget.item.salePrice?.toStringAsFixed(2) ?? "TBD \$"}",
+                        Text(
+                            "\$${widget.item.salePrice?.toStringAsFixed(2) ?? "TBD \$"}",
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 22,
@@ -167,7 +190,12 @@ class _SelectedItemScreenState extends State<SelectedItemScreen> {
           ),
           ElevatedButton(
               onPressed: () async {
-                await shoppingCartFirebase.addItemToCart(widget.client, widget.item);
+                if (widget.item.amountAvailable == widget.item.amountInCart) {
+                } else {
+                  await shoppingCartFirebase.additionToItemInCart(
+                      widget.client, widget.item);
+                  shoppingCartFirebase.getTotalForCart(widget.client);
+                }
 
                 Navigator.pop(context);
               },

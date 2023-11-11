@@ -61,9 +61,12 @@ class _ItemTileState extends State<ItemTile> {
                             const BoxShadow(color: Colors.grey, blurRadius: 5)
                           ]),
                       child: widget.item.picLocation != null
-                          ? ClipRRect(
+                          ?
+                      url != null ?
+                      ClipRRect(
                           borderRadius: BorderRadius.circular(20),
-                          child: Image.network(url.toString()))
+                          child: Image.network(url.toString(),fit: BoxFit.fill,)):
+                          CircularProgressIndicator()
                           : Image.asset('lib/Images/Image_not_available.png'))),
               //shrink photo
               Container(

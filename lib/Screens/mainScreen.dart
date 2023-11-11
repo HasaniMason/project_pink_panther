@@ -1,7 +1,6 @@
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:top_tier/Custom%20Data/Clients.dart';
-import 'package:top_tier/Firebase/ClientFirebase/ClientFirebase.dart';
 
 import 'Retail Screens/RetailSelectionScreen.dart';
 import 'Settings Screens/OpeningSettingScreen.dart';

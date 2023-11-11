@@ -13,6 +13,7 @@ class BookingEvent {
   String phoneNumber;
   String clientId;
   String clientEmail;
+  String description;
 
   BookingEvent({
     required this.startTime,
@@ -25,7 +26,8 @@ class BookingEvent {
     required this.lashType,
     required this.phoneNumber,
     required this.clientId,
-    required this.clientEmail
+    required this.clientEmail,
+    required this.description
 });
 
 
@@ -43,7 +45,8 @@ class BookingEvent {
         lashType: data?['lashType'],
         phoneNumber: data?['phoneNumber'],
       clientId: data?['clientId'],
-      clientEmail: data?['clientEmail']
+      clientEmail: data?['clientEmail'],
+      description: data?['description']
         );
   }
 
@@ -59,8 +62,8 @@ class BookingEvent {
       'lashType': lashType,
       'phoneNumber': phoneNumber,
       'clientId':clientId,
-      'clientEmail':clientEmail
-
+      'clientEmail':clientEmail,
+      'description':description
     };
   }
 

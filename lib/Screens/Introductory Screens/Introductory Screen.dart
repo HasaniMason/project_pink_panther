@@ -4,9 +4,9 @@ import 'package:fan_carousel_image_slider/fan_carousel_image_slider.dart';
 import 'package:cupertino_modal_sheet/cupertino_modal_sheet.dart';
 import 'package:top_tier/Custom%20Data/Clients.dart';
 import 'package:top_tier/Custom%20Data/Enums/SignInStatus.dart';
-import 'package:top_tier/Firebase/ClientFirebase/ClientFirebase.dart';
 import 'package:top_tier/Screens/mainScreen.dart';
 
+import '../../Firebase/Firebase/ClientFirebase.dart';
 import '../../Widgets/TextFieldWidgets.dart';
 import 'SignUpScreen.dart';
 
@@ -62,7 +62,7 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
 
         body: SingleChildScrollView(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
 
               Padding(
@@ -87,29 +87,29 @@ class _IntroductoryScreenState extends State<IntroductoryScreen> {
     return Column(
       children: [
         Container(
-           // height: 250,
+            height: 400,
             child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png',fit: BoxFit.fitHeight,),
         ),
 
         //Image Carousel
-        FanCarouselImageSlider(
-          imagesLink: images,
-          isAssets: true,
-          sliderHeight: 100,
-          userCanDrag: false,
-          isClickable: false,
-          showIndicator: false,
-          sliderDuration: const Duration(milliseconds: 300),
-        ),
-        FanCarouselImageSlider(
-          imagesLink: images2,
-          isAssets: true,
-          sliderHeight: 100,
-          userCanDrag: false,
-          isClickable: false,
-          showIndicator: false,
-          sliderDuration: const Duration(milliseconds: 300),
-        )
+        // FanCarouselImageSlider(
+        //   imagesLink: images,
+        //   isAssets: true,
+        //   sliderHeight: 100,
+        //   userCanDrag: false,
+        //   isClickable: false,
+        //   showIndicator: false,
+        //   sliderDuration: const Duration(milliseconds: 300),
+        // ),
+        // FanCarouselImageSlider(
+        //   imagesLink: images2,
+        //   isAssets: true,
+        //   sliderHeight: 100,
+        //   userCanDrag: false,
+        //   isClickable: false,
+        //   showIndicator: false,
+        //   sliderDuration: const Duration(milliseconds: 300),
+        // )
       ],
     );
   }

@@ -1,6 +1,9 @@
+import 'package:animation_search_bar/animation_search_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:top_tier/Firebase/ClientFirebase/SocialFirebase.dart';
+
+import '../../Firebase/Firebase/ClientFirebase.dart';
+import '../../Firebase/Firebase/SocialFirebase.dart';
 import '/Custom%20Data/Clients.dart';
 import '/Custom%20Data/SocialPost.dart';
 import '/Screens/Social%20Screens/AddSocialPost.dart';
@@ -23,14 +26,21 @@ class MainSocialScreen extends StatefulWidget {
 class _MainSocialScreenState extends State<MainSocialScreen> {
 
   SocialFirebase socialFirebase = SocialFirebase();
+  ClientFirebase clientFirebase = ClientFirebase();
   List<DocumentSnapshot> postList = [];
+
+  TextEditingController searchController = TextEditingController();
 
    Stream<QuerySnapshot> socialPostStream =
       FirebaseFirestore.instance.collection('socialPost').snapshots();
 
    setUp()async{
      socialPostStream =
-         FirebaseFirestore.instance.collection('socialPost').snapshots();
+         FirebaseFirestore.instance.collection('socialPost').orderBy('time',descending: false).snapshots();
+
+     widget.client =  await clientFirebase.getClient();
+
+
    }
 
 
@@ -49,7 +59,10 @@ class _MainSocialScreenState extends State<MainSocialScreen> {
       builder: (BuildContext context, AsyncSnapshot text){
       return Scaffold(
         appBar: AppBar(
-          leading: UserCircleWithInitials(
+          leading:
+          widget.client == 'Not Signed In' ?
+              CircularProgressIndicator():
+          UserCircleWithInitials(
             client: widget.client,
           ),
           actions: [
@@ -82,6 +95,19 @@ class _MainSocialScreenState extends State<MainSocialScreen> {
             ),
 
 
+            AnimationSearchBar(
+              centerTitle: 'search item...',
+              onChanged: (text) =>
+              {
+                setState(() {
+
+                })
+              },
+              searchTextEditingController: searchController,
+              isBackButtonVisible: false,
+            ),
+
+
             Expanded(
               //build stream for social feed
               child: StreamBuilder(
@@ -99,6 +125,16 @@ class _MainSocialScreenState extends State<MainSocialScreen> {
                     }
                     postList = snapshot.data!.docs;
 
+                    if (searchController.text.length > 0) {
+                      postList = postList.where((element) {
+                        return element
+                            .get('firstName')
+                            .toString()
+                            .toLowerCase()
+                            .contains(searchController.text.toLowerCase());
+                      }).toList();
+                    }
+
                     //listview
                     return ListView.separated(
                         itemBuilder: (BuildContext context, int index) {
@@ -112,12 +148,15 @@ class _MainSocialScreenState extends State<MainSocialScreen> {
                               likes: postList[index]['likes'],
                           pic: postList[index]['pic'] ?? 'null');
 
+
+
                           //return each post in custom widget
                           return SocialFeedWidget(
                             key:  ObjectKey(thisPost),
                             socialPost: thisPost,
                             firstName: thisPost.firstName,
                             lastName: thisPost.lastName,
+                            client: widget.client ,
                           );
                         },
                         separatorBuilder: (BuildContext context, int index) {

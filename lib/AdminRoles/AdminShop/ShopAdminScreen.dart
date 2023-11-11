@@ -182,21 +182,22 @@ class _ItemWidgetState extends State<ItemWidget> {
                                   color:
                                       Theme.of(context).colorScheme.secondary),
                         ),
-                        Text('Cost: \$${widget.item.cost ?? 0.00}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondary))
+
                       ],
                     ),
+                    Text('Cost: \$${widget.item.cost?.toStringAsFixed(2) ?? 0.00}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(
+                            color: Theme.of(context)
+                                .colorScheme
+                                .secondary)),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Text(
-                          'Retail: \$${widget.item.retail}',
+                          'Retail: \$${widget.item.retail.toStringAsFixed(2)}',
                           style: Theme.of(context)
                               .textTheme
                               .bodySmall!
@@ -217,6 +218,14 @@ class _ItemWidgetState extends State<ItemWidget> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
+                        Text('Sale Price: \$${widget.item.salePrice?.toStringAsFixed(2) ?? 0.00}',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall!
+                                .copyWith(
+                                color: Theme.of(context)
+                                    .colorScheme
+                                    .secondary)),
                         Text(
                           'Amount Avail: ${widget.item.amountAvailable}',
                           style: Theme.of(context)
@@ -226,14 +235,7 @@ class _ItemWidgetState extends State<ItemWidget> {
                                   color:
                                       Theme.of(context).colorScheme.secondary),
                         ),
-                        Text('Sale Price: ${widget.item.salePrice ?? 0.00}',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .secondary))
+
                       ],
                     ),
                     widget.item.picLocation == null ||

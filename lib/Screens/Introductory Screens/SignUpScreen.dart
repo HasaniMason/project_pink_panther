@@ -2,9 +2,9 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:top_tier/Custom%20Data/Clients.dart';
 import 'package:top_tier/Custom%20Data/Enums/CreateAccountStatus.dart';
-import 'package:top_tier/Firebase/ClientFirebase/ClientFirebase.dart';
 import 'package:top_tier/Screens/mainScreen.dart';
 
+import '../../Firebase/Firebase/ClientFirebase.dart';
 import '../../Widgets/TextFieldWidgets.dart';
 import 'package:uuid/uuid.dart';
 
@@ -189,6 +189,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 client.lastName = lastNameController.text;
                 client.email = emailController.text;
                 client.phoneNumber = phoneNumberController.text;
+
+
+                if(passwordController.text != confirmPasswordController.text){
+                  createAccountStatus = CreateAccountStatus.matchingPasswords;
+                }
               });
 
               //if email is in use, display error, else create user and proceed
@@ -201,6 +206,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   if(!mounted) return;
                   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)), (route) => false);
                 }else{
+
                   errorDialog(context, createAccountStatus);
                 }
               }
@@ -227,6 +233,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
     }
     if(createAccountStatus == CreateAccountStatus.incorrectEmailFormat){
       errorMessage = 'Incorrect email format. Please check email and try again.';
+    }
+    if(createAccountStatus == CreateAccountStatus.matchingPasswords){
+      errorMessage = "Passwords do no match!";
     }
 
 

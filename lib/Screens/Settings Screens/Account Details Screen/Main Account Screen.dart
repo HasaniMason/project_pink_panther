@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:top_tier/Custom%20Data/Clients.dart';
 import 'package:top_tier/Widgets/BigUserCircle.dart';
+import 'package:top_tier/Widgets/InputTextFieldWidgets.dart';
 import 'package:top_tier/Widgets/UserCircleWithInitials.dart';
+
+import '../../../Firebase/Firebase/ClientFirebase.dart';
 
 class MainAccountScreen extends StatefulWidget {
   Client client;
@@ -13,6 +16,10 @@ class MainAccountScreen extends StatefulWidget {
 }
 
 class _MainAccountScreenState extends State<MainAccountScreen> {
+
+  TextEditingController phoneController = TextEditingController();
+  ClientFirebase clientFirebase = ClientFirebase();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +43,7 @@ class _MainAccountScreenState extends State<MainAccountScreen> {
 
                   Positioned(
                     top:520,
-                      left: 100,
+                      left: 80,
                       child: Column(
                        mainAxisAlignment: MainAxisAlignment.center,
 
@@ -48,9 +55,17 @@ class _MainAccountScreenState extends State<MainAccountScreen> {
                               ///insert appointment info here
                             ],
                           ),
-                          ElevatedButton(onPressed: (){}, child: Text("Edit Phone Number",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),)),
+                          ElevatedButton(onPressed: (){
+                            showModalBottomSheet(context: context,isScrollControlled: true, builder: (context)=>bottomModal()).then((value) => {
+                              setState((){
+
+                              })
+                            });
+
+
+                          }, child: Text("Edit Phone Number",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),)),
                           //ElevatedButton(onPressed: (){}, child: Text("Email Top Tier",style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Theme.of(context).primaryColor),)),
-                        Container(height: 100,child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png'))
+                        Center(child: Container(height: 100,child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')))
                         ],
                       )
                   )
@@ -60,6 +75,31 @@ class _MainAccountScreenState extends State<MainAccountScreen> {
 
 
           ],
+        ),
+      ),
+    );
+  }
+
+  bottomModal(){
+    return Padding(
+      padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+      child: SingleChildScrollView(
+        child: Container(
+
+          child: Center(
+            child: Column(
+              children: [
+                InputTextFieldWidget(controller: phoneController, hintText: 'Enter Phone Number', textInputType: TextInputType.phone),
+                ElevatedButton(onPressed: () async {
+                   widget.client.phoneNumber = await phoneController.text;
+
+                   clientFirebase.updatePhone(widget.client);
+
+                  Navigator.pop(context);
+                }, child: Text("Enter",style: Theme.of(context).textTheme.displaySmall!.copyWith(color: Theme.of(context).primaryColor),))
+              ],
+            ),
+          )
         ),
       ),
     );

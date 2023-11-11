@@ -5,5 +5,6 @@ enum CreateAccountStatus{
   emailInUse,
   weakPassword,
   passwordNotLongEnough,
-  incorrectEmailFormat
+  incorrectEmailFormat,
+  matchingPasswords
 }
