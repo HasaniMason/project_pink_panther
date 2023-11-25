@@ -96,7 +96,7 @@ class _MainSocialScreenState extends State<MainSocialScreen> {
 
 
             AnimationSearchBar(
-              centerTitle: 'search item...',
+              centerTitle: 'search by username...',
               onChanged: (text) =>
               {
                 setState(() {

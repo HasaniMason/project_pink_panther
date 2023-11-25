@@ -8,6 +8,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:top_tier/Firebase/Push%20Notifications/pushNotification.dart';
 import 'package:top_tier/Screens/Introductory%20Screens/Introductory%20Screen.dart';
+import 'package:top_tier/Screens/Introductory%20Screens/SplashScreen.dart';
 import 'package:top_tier/Screens/mainScreen.dart';
 import 'Custom%20Data/Clients.dart';
 import 'package:fluid_bottom_nav_bar/fluid_bottom_nav_bar.dart';
@@ -20,6 +21,7 @@ import 'Screens/Settings Screens/OpeningSettingScreen.dart';
 import 'firebase_options.dart';
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:flutter/services.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,6 +45,7 @@ Future<void> main() async {
     appleProvider: AppleProvider.appAttest,
   );
 
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
 
 
@@ -87,7 +90,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
 
-    _child = RetailSelectionScreen(client: client);
+    //_child = RetailSelectionScreen(client: client);
+
 
     ///change this to separate screen
   }
@@ -123,6 +127,17 @@ class _MyAppState extends State<MyApp> {
           phoneNumber: '',
           notificationsOn: true);
     }
+
+
+    //
+    // if (FirebaseAuth.instance.currentUser == null){
+    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>IntroductoryScreen(clientFirebase: clientFirebase)));
+    // }else{
+    //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)));
+    //
+    // }
+
+
   }
 
   //google fonts
@@ -136,6 +151,18 @@ class _MyAppState extends State<MyApp> {
   //**Font 2 Possibilities
   //Sriracha
   //
+
+
+  // Widget runSplashScreen(){
+  //   Future.delayed(Duration(seconds: 3),(){
+  //     if (FirebaseAuth.instance.currentUser == null){
+  //       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>IntroductoryScreen(clientFirebase: clientFirebase)));
+  //     }else{
+  //       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>MainScreen(client: client)));
+  //
+  //     }
+  //   });
+  // }
 
   // This widget is the root of your application.
   @override
@@ -185,34 +212,30 @@ class _MyAppState extends State<MyApp> {
           builder: (BuildContext context, AsyncSnapshot text) {
             return WillPopScope(
                 onWillPop: () async => false,
-                child: FirebaseAuth.instance.currentUser == null
-                    ?
+              child: SplashScreen(client: client,),
                     //Open source code to display splash screen
-                    AnimatedSplashScreen(
-                        splash: Container(height:200,
-                            child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')),
-                        backgroundColor: Colors.black,
-                        duration: 3000,
-                        nextScreen: IntroductoryScreen(
-                          clientFirebase: clientFirebase,
-                        ),
-                        //nextScreen: MainScreen(client: clients,),
-                        splashTransition: SplashTransition.fadeTransition,
-                        pageTransitionType: PageTransitionType.fade,
-                      )
-                    : AnimatedSplashScreen(
-                        splash: Container(
-                            height:200,
-                            child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png')),
-                        backgroundColor: Colors.black,
-                        duration: 3000,
-                        nextScreen: MainScreen(
-                          client: client,
-                        ),
-                        //nextScreen: MainScreen(client: clients,),
-                        splashTransition: SplashTransition.fadeTransition,
-                        pageTransitionType: PageTransitionType.fade,
-                      ),
+                    // AnimatedSplashScreen(
+                    //     splash: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png',fit: BoxFit.fill),
+                    //     backgroundColor: Colors.black,
+                    //     duration: 3000,
+                    //     nextScreen: IntroductoryScreen(
+                    //       clientFirebase: clientFirebase,
+                    //     ),
+                    //     //nextScreen: MainScreen(client: clients,),
+                    //     splashTransition: SplashTransition.fadeTransition,
+                    //     pageTransitionType: PageTransitionType.fade,
+                    //   )
+                    // : AnimatedSplashScreen(
+                    //     splash: Container(child: Image.asset('lib/Images/Top Tier Logos/TopTierLogo_TRNS.png',fit: BoxFit.fitHeight,)),
+                    //     backgroundColor: Colors.black,
+                    //     duration: 3000,
+                    //     nextScreen: MainScreen(
+                    //       client: client,
+                    //     ),
+                    //     //nextScreen: MainScreen(client: clients,),
+                    //     splashTransition: SplashTransition.fadeTransition,
+                    //     pageTransitionType: PageTransitionType.fade,
+                    //   ),
             );
           },
         )
@@ -224,63 +247,5 @@ class _MyAppState extends State<MyApp> {
   }
 
   //Screen to show when signed in
-  Scaffold mainScreen() {
-    return Scaffold(
-      extendBody: true,
-      body: _child,
-      bottomNavigationBar: FluidNavBar(
-        icons: [
-          FluidNavBarIcon(
-              icon: Icons.store,
-              backgroundColor: Colors.grey,
-              extras: {'label': 'Store'}),
-          FluidNavBarIcon(
-              icon: Icons.people,
-              backgroundColor: Colors.grey,
-              extras: {'label': 'News'}),
-          FluidNavBarIcon(
-              icon: Icons.settings,
-              backgroundColor: Colors.grey,
-              extras: {'label': 'Settings'})
-        ],
-        onChange: _handleNavigationChange,
-        style: const FluidNavBarStyle(
-            iconUnselectedForegroundColor: Colors.black,
-            iconSelectedForegroundColor: Color(0xffef6def),
-            barBackgroundColor: Color(0xffef6def)),
-        scaleFactor: 1.5,
-        defaultIndex: 0,
-        itemBuilder: (icon, item) => Semantics(
-          label: icon.extras!['label'],
-          child: item,
-        ),
-      ),
-    );
-  }
 
-  //method to handle change when a new icon is selected in the nav bar... changes screens
-  void _handleNavigationChange(int index) {
-    setState(() {
-      switch (index) {
-        case 0:
-          _child = RetailSelectionScreen(client: client);
-          break;
-        case 1:
-          _child = MainSocialScreen(
-            client: client,
-          );
-          break;
-        case 2:
-          _child = OpeningSettingScreen(client: client);
-          break;
-      }
-
-      _child = AnimatedSwitcher(
-        switchInCurve: Curves.easeInOut,
-        switchOutCurve: Curves.easeIn,
-        duration: const Duration(milliseconds: 500),
-        child: _child,
-      );
-    });
-  }
 }

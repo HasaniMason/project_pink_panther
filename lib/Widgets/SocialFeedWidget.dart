@@ -305,6 +305,6 @@ class _SocialFeedWidgetState extends State<SocialFeedWidget> with AutomaticKeepA
   }
 
   @override
-  // TODO: implement wantKeepAlive
+
   bool get wantKeepAlive => true;
 }

@@ -100,6 +100,7 @@ class _OpeningAppointmentScreenState extends State<OpeningAppointmentScreen> {
               Expanded(
                 child: Center(
                   child: SfCalendar(
+                    minDate: DateTime.now(),
                     controller: calendarController,
                     view: CalendarView.month,
                     monthViewSettings: const MonthViewSettings(

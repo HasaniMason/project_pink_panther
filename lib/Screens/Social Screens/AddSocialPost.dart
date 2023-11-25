@@ -9,6 +9,7 @@ import 'package:images_picker/images_picker.dart';
 
 import '../../Custom Data/SocialPost.dart';
 import '../../Widgets/UserCircleWithInitials.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 
 class AddSocialPost extends StatefulWidget {
@@ -37,17 +38,49 @@ class _AddSocialPostState extends State<AddSocialPost> {
   TextEditingController editingController = TextEditingController();
   SocialFirebase socialFirebase = SocialFirebase();
 
+
+
   Future getImage() async {
-    List<Media>? res =
-        await ImagesPicker.pick(count: 1, pickType: PickType.image);
 
-    setState(() {
-      path = res?[0].thumbPath;
-    });
 
-    if(path != null){
-      print(path);
+    final permissionStatus = await Permission.storage.status;
+
+    if(permissionStatus.isGranted){
+      List<Media>? res =
+      await ImagesPicker.pick(count: 1, pickType: PickType.image);
+
+      setState(() {
+        path = res?[0].thumbPath;
+      });
+
+      if(path != null){
+        print(path);
+      }
+    }else{
+      await openAppSettings();
     }
+    // if(permissionStatus.isDenied){
+    //   await Permission.storage.request();
+    //
+    //   if(permissionStatus.isDenied){
+    //     await openAppSettings();
+    //   }
+    // }else if(permissionStatus.isPermanentlyDenied){
+    //   await openAppSettings();
+    // }else{
+    //   List<Media>? res =
+    //   await ImagesPicker.pick(count: 1, pickType: PickType.image);
+    //
+    //   setState(() {
+    //     path = res?[0].thumbPath;
+    //   });
+    //
+    //   if(path != null){
+    //     print(path);
+    //   }
+    // }
+
+
 
 //bool status = await ImagesPicker.saveImageToAlbum(File(res![0]!.thumbPath!));
 // print(status);
@@ -122,6 +155,7 @@ class _AddSocialPostState extends State<AddSocialPost> {
               //button to attach file
               IconButton(
                 onPressed: () {
+
                   getImage();
                 },
                 icon: const Icon(Icons.attach_file_outlined),

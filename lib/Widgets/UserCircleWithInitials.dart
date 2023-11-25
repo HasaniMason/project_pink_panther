@@ -31,13 +31,16 @@ class _UserCircleWithInitialsState extends State<UserCircleWithInitials> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
+            widget.firstName!.isNotEmpty ?
             Text(
               widget.firstName?[0] ?? '',
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
                   .copyWith(color: Colors.black,fontSize: widget.textSize ?? 20),
-            ),
+            ): const SizedBox(),
+
             widget.lastName!.isNotEmpty ?   //to test if lastname has empty string
             Text(widget.lastName?[0] ?? '',
                 style:
@@ -50,13 +53,15 @@ class _UserCircleWithInitialsState extends State<UserCircleWithInitials> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            widget.client!.firstName.isNotEmpty ?
             Text(
               widget.client?.firstName[0] ?? '',
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!
                   .copyWith(color: Colors.black,fontSize: widget.textSize ?? 20),
-            ),
+            ):const SizedBox(),
+
             widget.client!.lastName.isNotEmpty ?
             Text(widget.client?.lastName[0] ?? '',
                 style:

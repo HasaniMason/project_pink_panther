@@ -187,46 +187,50 @@ class _orderContainerState extends State<orderContainer> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "${widget.shopOrders.firstName} ${widget.shopOrders
-                        .lastName}",
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .bodySmall!
-                        .copyWith(color: Theme
-                        .of(context)
-                        .primaryColor),
-                  ),
-                  Text("${widget.shopOrders.phoneNumber}",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.black))
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text("\$${widget.shopOrders.total.toStringAsFixed(2)}",
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "${widget.shopOrders.firstName} ${widget.shopOrders
+                          .lastName}",
                       style: Theme
                           .of(context)
                           .textTheme
                           .bodySmall!
                           .copyWith(color: Theme
                           .of(context)
-                          .primaryColor)),
-                  Text("${widget.shopOrders.email}",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.black)),
-                ],
+                          .primaryColor),
+                    ),
+                    Text("${widget.shopOrders.phoneNumber}",
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Colors.black))
+                  ],
+                ),
+              ),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text("\$${widget.shopOrders.total.toStringAsFixed(2)}",
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Theme
+                            .of(context)
+                            .primaryColor)),
+                    Text("${widget.shopOrders.email}",
+                        style: Theme
+                            .of(context)
+                            .textTheme
+                            .bodySmall!
+                            .copyWith(color: Colors.black)),
+                  ],
+                ),
               )
             ],
           ),

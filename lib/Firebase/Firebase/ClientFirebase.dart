@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:top_tier/Custom%20Data/Clients.dart';
+import 'package:top_tier/Custom%20Data/Constants/Constants.dart';
 import 'package:top_tier/Custom%20Data/Enums/CreateAccountStatus.dart';
 import 'package:top_tier/Custom%20Data/Enums/SignInStatus.dart';
 import 'package:top_tier/Firebase/Push%20Notifications/pushNotification.dart';
@@ -32,6 +33,8 @@ class ClientFirebase {
 
   ///create an account for user using email and password
   Future<CreateAccountStatus> createUser(Client client, String password) async {
+
+    ConstantDatabase constantDatabase = ConstantDatabase();
     try {
       //try creating user with email and password
       UserCredential userCredential = await FirebaseAuth.instance
@@ -41,6 +44,7 @@ class ClientFirebase {
       user = userCredential.user;
 
       client.id = user!.uid ?? '';
+      client.version = constantDatabase.version;
 
       //client.token = await PushNotifications().initNotifications();
 
@@ -134,7 +138,8 @@ class ClientFirebase {
           admin: false,
           phoneNumber: '',
           notificationsOn: true,
-          cartTotal: 0.00);
+          cartTotal: 0.00,
+      version: 1.1);
     }
   }
 
@@ -178,10 +183,14 @@ class ClientFirebase {
       activeAccount: true,
       admin: false,
       phoneNumber: '',
-      notificationsOn: true);
+      notificationsOn: true,
+  version: 1.1);
 
   ///Sign in with Google. If email exists in database, it will use email to obtain client object from firestore. If it does not exist, client object will be created and stored in firestore
   Future<Client> signInWithGoogle() async {
+
+    ConstantDatabase constantDatabase = ConstantDatabase();
+
     //begin interactive process
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
 
@@ -237,6 +246,7 @@ class ClientFirebase {
       client.phoneNumber = '';
       client.notificationsOn = true;
       client.id = FirebaseAuth.instance.currentUser!.uid;
+      client.version =  constantDatabase.version;
 
       //split display name into first and last name client variables (google has it as a whole name)
 

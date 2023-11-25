@@ -23,6 +23,7 @@ class Client {
   String? zipCode;
 
   num? version;
+  bool? canPost;   //can control if user can post
 
   //specify if these variable are required or not. If not must declare variable using '?' to the right of variable type
   Client(
@@ -43,7 +44,8 @@ class Client {
       this.zipCode,
       this.addressLine1,
       this.addressLine2,
-      this.version});
+      this.version,
+      this.canPost});
 
   factory Client.fromFireStore(DocumentSnapshot<Map<String, dynamic>> snapshot,
       SnapshotOptions? options) {
@@ -66,7 +68,8 @@ class Client {
     zipCode: data?['zipCode'],
     addressLine1: data?['addressLine1'],
     addressLine2: data?['addressLine2'],
-    version: data?['version']);
+    version: data?['version'],
+    canPost: data?['canPost']);
   }
 
   Map<String, dynamic> toFireStore() {
@@ -88,7 +91,8 @@ class Client {
       'zipCode':zipCode,
       'addressLine1': addressLine1,
       'addressLine2':addressLine2,
-      'version':version
+      'version':version,
+      'canPost':canPost,
     };
   }
 }
